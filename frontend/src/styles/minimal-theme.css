@@ -1,0 +1,621 @@
+/**
+ * Minimal Research Theme
+ *
+ * Purpose: Create a calm, distraction-free environment for behavioral research
+ * Philosophy: "Invisible design" - participants should only notice the task
+ *
+ * To use: Import this file AFTER Bootstrap in your App.js or index.js
+ *
+ * Font Size Scaling: This theme uses rem units throughout, which means
+ * all text and spacing will scale proportionally when the root font size
+ * changes (e.g., via FontSizeControls). Layout widths use px for consistency.
+ */
+
+/* ============================================
+   CSS CUSTOM PROPERTIES (Design Tokens)
+   ============================================ */
+
+:root {
+  /* Color Palette - Neutral & Calm */
+  --color-background: #FAFAFA;
+  --color-surface: #FFFFFF;
+  --color-border: #E5E7EB;
+  --color-border-subtle: #F3F4F6;
+
+  /* Text Colors - Soft & Readable */
+  --color-text-primary: #2C3E50;
+  --color-text-secondary: #7F8C8D;
+  --color-text-tertiary: #BDC3C7;
+
+  /* Accent Colors - Single accent + semantic colors */
+  --color-accent: #3498DB;
+  --color-accent-hover: #2980B9;
+  --color-success: #27AE60;
+  --color-warning: #F39C12;
+  --color-error: #E74C3C;
+
+  /* Spacing - Consistent rhythm (using rem for scalability) */
+  --space-xs: 0.25rem;   /* 4px at default */
+  --space-sm: 0.5rem;    /* 8px at default */
+  --space-md: 1rem;      /* 16px at default */
+  --space-lg: 1.5rem;    /* 24px at default */
+  --space-xl: 2rem;      /* 32px at default */
+
+  /* Typography - Using rem for responsive font sizing */
+  --font-size-sm: 0.875rem;   /* 14px at default 16px root */
+  --font-size-base: 1rem;      /* 16px at default 16px root */
+  --font-size-lg: 1.125rem;    /* 18px at default 16px root */
+  --font-size-xl: 1.5rem;      /* 24px at default 16px root */
+
+  --line-height-tight: 1.25;
+  --line-height-base: 1.5;
+  --line-height-relaxed: 1.6;
+
+  /* Borders & Shadows - Subtle */
+  --border-radius: 4px;
+  --border-width: 1px;
+  --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+
+  /* Transitions - Quick & smooth */
+  --transition-fast: 150ms ease;
+  --transition-base: 200ms ease;
+}
+
+/* ============================================
+   GLOBAL RESETS & BASE STYLES
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   BOOTSTRAP OVERRIDES - Minimal Style
+   ============================================ */
+
+/* Container - More breathing room */
+.container {
+  max-width: 1400px;
+  padding-left: var(--space-lg);
+  padding-right: var(--space-lg);
+}
+
+/* Typography - Softer headings */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-md);
+}
+
+h1, .h1 { font-size: var(--font-size-xl); }
+h2, .h2 { font-size: var(--font-size-lg); }
+
+/* Text center - reduce top margin */
+.text-center {
+  margin-top: 0;
+}
+
+/* Remove Bootstrap's heavy margins */
+.mb-4 { margin-bottom: var(--space-md) !important; }
+.mt-4 { margin-top: var(--space-md) !important; }
+.m-3 { margin: var(--space-sm) !important; }
+
+/* ============================================
+   BUTTONS - Minimal & Purposeful
+   ============================================ */
+
+.btn {
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-base);
+  font-weight: 400;
+  border-radius: var(--border-radius);
+  border: var(--border-width) solid transparent;
+  transition: all var(--transition-fast);
+  box-shadow: none !important; /* Remove Bootstrap shadows */
+  text-transform: none;
+  cursor: pointer;
+}
+
+/* Primary button - accent color */
+.btn-primary {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+}
+
+/* Secondary button - outline style */
+.btn-secondary {
+  background-color: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: var(--color-border-subtle);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+/* Success button */
+.btn-success {
+  background-color: var(--color-success);
+  border-color: var(--color-success);
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #229954;
+  border-color: #229954;
+}
+
+/* Warning button */
+.btn-warning {
+  background-color: var(--color-warning);
+  border-color: var(--color-warning);
+  color: white;
+}
+
+/* Danger button */
+.btn-danger {
+  background-color: transparent;
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+.btn-danger:hover {
+  background-color: var(--color-error);
+  border-color: var(--color-error);
+  color: white;
+}
+
+/* Button sizes */
+.btn-lg {
+  padding: 0.75rem 1.25rem;
+  font-size: var(--font-size-base);
+}
+
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: var(--font-size-sm);
+}
+
+/* Narrow buttons (custom class) */
+.btn-narrow {
+  min-width: 7.5rem;
+}
+
+/* Remove button focus ring, add subtle outline */
+.btn:focus,
+.btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  box-shadow: none !important;
+}
+
+/* ============================================
+   FORMS - Clean & Accessible
+   ============================================ */
+
+.form-control,
+.form-select {
+  padding: var(--space-sm) 0.75rem;
+  font-size: var(--font-size-base);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--border-radius);
+  background-color: var(--color-surface);
+  transition: border-color var(--transition-fast);
+  box-shadow: none !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--color-accent);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1) !important;
+}
+
+/* Input groups */
+.input-group {
+  box-shadow: none;
+}
+
+.input-group .btn {
+  border-left: none;
+}
+
+/* Checkboxes */
+.form-check-input {
+  border: var(--border-width) solid var(--color-border);
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.form-check-input:focus {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+/* ============================================
+   LAYOUT - Research-Focused Grid
+   ============================================ */
+
+/* Row spacing */
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Game view - 50/50 split */
+.row.game-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--color-border);
+  min-height: calc(100vh - 100px);
+}
+
+.row.game-layout > div {
+  background: var(--color-surface);
+  padding: var(--space-lg);
+}
+
+/* ============================================
+   MODALS - Subtle Overlays
+   ============================================ */
+
+.modal {
+  background-color: rgba(0, 0, 0, 0.3); /* Lighter overlay */
+}
+
+.modal-content {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-lg);
+}
+
+.modal-header {
+  border-bottom: var(--border-width) solid var(--color-border-subtle);
+  padding-bottom: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.modal-footer {
+  border-top: none;
+  padding-top: var(--space-md);
+}
+
+.modal-title {
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+}
+
+/* Close button */
+.btn-close {
+  opacity: 0.5;
+}
+
+.btn-close:hover {
+  opacity: 1;
+}
+
+/* ============================================
+   CUSTOM COMPONENTS
+   ============================================ */
+
+/* Chat Box */
+.chat-box {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--border-radius);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-md);
+}
+
+.chat-message {
+  margin-bottom: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--border-radius);
+  background-color: var(--color-border-subtle);
+  animation: fadeIn 200ms ease;
+}
+
+.chat-message.own-message {
+  background-color: rgba(52, 152, 219, 0.1);
+  margin-left: auto;
+  max-width: 80%;
+}
+
+.chat-input-container {
+  border-top: var(--border-width) solid var(--color-border);
+  padding: var(--space-md);
+}
+
+/* Game Box */
+.game-box {
+  background: var(--color-surface);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--space-lg);
+}
+
+.game-problem {
+  margin-bottom: var(--space-lg);
+  padding: var(--space-md);
+  background: var(--color-border-subtle);
+  border-radius: var(--border-radius);
+}
+
+/* Timer & Points Display */
+.timer,
+.points-display {
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Status indicators */
+.status-indicator {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  margin-right: var(--space-xs);
+}
+
+.status-indicator.active {
+  background-color: var(--color-success);
+}
+
+.status-indicator.inactive {
+  background-color: var(--color-border);
+}
+
+/* ============================================
+   ANIMATIONS - Minimal & Purposeful
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Apply to new messages */
+.message-enter {
+  animation: slideIn var(--transition-base);
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+/* Focus visible - accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Remove focus outline for mouse users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Text utilities */
+.text-muted {
+  color: var(--color-text-secondary) !important;
+}
+
+.text-small {
+  font-size: var(--font-size-sm);
+}
+
+/* Spacing utilities */
+.d-flex {
+  display: flex;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+/* Dividers */
+.divider {
+  height: 1px;
+  background-color: var(--color-border-subtle);
+  margin: var(--space-lg) 0;
+}
+
+/* ============================================
+   RESPONSIVE - Mobile Considerations
+   ============================================ */
+
+@media (max-width: 768px) {
+  .row.game-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+    background: transparent;
+  }
+
+  .container {
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+  }
+}
+
+/* ============================================
+   PRINT STYLES - For Data Collection
+   ============================================ */
+
+@media print {
+  body {
+    background: white;
+  }
+
+  .btn,
+  .modal {
+    display: none;
+  }
+}
+
+/* ============================================
+   EXPERIMENTER-SPECIFIC OVERRIDES
+   ============================================ */
+
+/* Make experimenter controls less prominent */
+.experimenter-controls {
+  padding: var(--space-md);
+  background: var(--color-border-subtle);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--space-lg);
+}
+
+.experimenter-controls .btn {
+  margin-right: var(--space-sm);
+}
+
+/* Configuration modal sections */
+.config-section {
+  margin-bottom: var(--space-lg);
+}
+
+.config-section:last-child {
+  margin-bottom: 0;
+}
+
+/* Checkbox container */
+.checkbox-container {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  margin: 0;
+}
+
+.checkbox-input {
+  cursor: pointer;
+}
+
+/* ============================================
+   PARTICIPANT-SPECIFIC STYLES
+   ============================================ */
+
+/* Name entry screen */
+.name-entry {
+  max-width: 25rem;
+  margin: 20vh auto;
+  text-align: center;
+}
+
+/* Waiting modal */
+.modal.waiting-modal .modal-content {
+  text-align: center;
+  padding: var(--space-xl);
+}
+
+/* Ready button emphasis */
+.btn.ready-button {
+  min-width: 10rem;
+  padding: 0.75rem var(--space-lg);
+  font-size: var(--font-size-lg);
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+
+/* Skip to main content link */
+.skip-to-main {
+  position: absolute;
+  top: -2.5rem;
+  left: 0;
+  background: var(--color-accent);
+  color: white;
+  padding: var(--space-sm) var(--space-md);
+  z-index: 100;
+}
+
+.skip-to-main:focus {
+  top: 0;
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

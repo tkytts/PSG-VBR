@@ -1,0 +1,12 @@
+[
+    {"order": 1, "name": "Camila", "gender": "F"},
+    {"order": 2, "name": "Leonardo", "gender": "M"},
+    {"order": 3, "name": "Sílvia", "gender": "F"},
+    {"order": 4, "name": "Carlos", "gender": "M"},
+    {"order": 5, "name": "Adriana", "gender": "F"},
+    {"order": 6, "name": "Rodrigo", "gender": "M"},
+    {"order": 7, "name": "Valéria", "gender": "F"},
+    {"order": 8, "name": "Renato", "gender": "M"},
+    {"order": 9, "name": "Marina", "gender": "F"},
+    {"order": 10, "name": "Vítor", "gender": "M"}
+  ]

@@ -1,0 +1,202 @@
+using FluentAssertions;
+using GameServer.Application.Interfaces;
+using GameServer.Application.Services;
+using GameServer.Domain.Entities;
+using GameServer.Domain.Enums;
+using Microsoft.Extensions.Options;
+using NSubstitute;
+using Xunit;
+
+namespace GameServer.Application.Tests.Services;
+
+public class GameServiceTests
+{
+    private readonly GameState _state;
+    private readonly IBlockRepository _blockRepository;
+    private readonly IOptions<GameSettings> _settings;
+    private readonly GameService _sut;
+
+    public GameServiceTests()
+    {
+        _state = new GameState();
+        _blockRepository = Substitute.For<IBlockRepository>();
+        _settings = Options.Create(new GameSettings { PointsAwarded = 100 });
+
+        // Setup default blocks
+        var blocks = new List<Block>
+    {
+        new Block
+        {
+            BlockName = "Block 1",
+            Problems = new List<string> { "p1", "p2", "p3" }
+        },
+        new Block
+        {
+            BlockName = "Block 2",
+            Problems = new List<string> { "p4" }
+        }
+    };
+        _blockRepository.GetAllAsync().Returns(blocks);
+
+        _sut = new GameService(_state, _blockRepository, _settings);
+    }
+
+    #region Game State Tests
+
+    [Fact]
+    public void StartGame_SetsIsLiveToTrue()
+    {
+        // Act
+        _sut.StartGame();
+
+        // Assert
+        _state.IsLive.Should().BeTrue();
+    }
+
+    [Fact]
+    public void StopGame_SetsIsLiveToFalse()
+    {
+        // Arrange
+        _sut.StartGame();
+
+        // Act
+        _sut.StopGame();
+
+        // Assert
+        _state.IsLive.Should().BeFalse();
+    }
+
+    #endregion
+
+    #region Problem Navigation Tests
+
+    [Fact]
+    public void FirstBlock_SetsIndicesCorrectly()
+    {
+        // Act
+        var (block, problem) = _sut.FirstBlock();
+
+        // Assert
+        _state.CurrentBlockIndex.Should().Be(0);
+        _state.CurrentProblemIndex.Should().Be(0);
+        block.Should().NotBeNull();
+        block!.BlockName.Should().Be("Block 1");
+        problem.Should().NotBeNull();
+        problem!.Should().Be("p1");
+    }
+
+    [Fact]
+    public void NextBlock_IncrementsBlockIndex()
+    {
+        // Arrange
+        _sut.FirstBlock();
+
+        // Act
+        var (block, _) = _sut.NextBlock();
+
+        // Assert
+        _state.CurrentBlockIndex.Should().Be(1);
+        _state.CurrentProblemIndex.Should().Be(0);
+        block!.BlockName.Should().Be("Block 2");
+    }
+
+    [Fact]
+    public void NextProblem_IncrementsProblemIndex()
+    {
+        // Arrange
+        _sut.FirstBlock();
+
+        // Act
+        var (_, problem) = _sut.NextProblem();
+
+        // Assert
+        _state.CurrentProblemIndex.Should().Be(1);
+        problem!.Should().Be("p2");
+    }
+
+    [Fact]
+    public void SetProblemSelection_SetsIndicesCorrectly()
+    {
+        // Act
+        _sut.SetProblemSelection(1, 0);
+        var (block, problem) = _sut.GetCurrentProblem();
+
+        // Assert
+        _state.CurrentBlockIndex.Should().Be(1);
+        _state.CurrentProblemIndex.Should().Be(0);
+        block!.BlockName.Should().Be("Block 2");
+        problem!.Should().Be("p4");
+    }
+
+    #endregion
+
+    #region Game Resolution Tests
+
+    [Theory]
+    [InlineData(GameResolutionType.AP, true, 100)]
+    [InlineData(GameResolutionType.DP, true, 100)]
+    [InlineData(GameResolutionType.ANP, false, 0)]
+    [InlineData(GameResolutionType.DNP, false, 0)]
+    [InlineData(GameResolutionType.TNP, false, 0)]
+    public void ResolveGame_ReturnsCorrectResult(
+        GameResolutionType resolutionType,
+        bool expectedCorrect,
+        int expectedPoints)
+    {
+        // Act
+        var result = _sut.ResolveGame(resolutionType, "test-answer");
+
+        // Assert
+        result.IsAnswerCorrect.Should().Be(expectedCorrect);
+        result.PointsAwarded.Should().Be(expectedPoints);
+    }
+
+    [Fact]
+    public void ResolveGame_WithCorrectAnswer_AccumulatesScore()
+    {
+        // Act
+        _sut.ResolveGame(GameResolutionType.AP, "answer1");
+        _sut.ResolveGame(GameResolutionType.DP, "answer2");
+        var result = _sut.ResolveGame(GameResolutionType.AP, "answer3");
+
+        // Assert
+        result.CurrentScore.Should().Be(300);
+        _state.CurrentScore.Should().Be(300);
+    }
+
+    [Fact]
+    public void ResolveGame_OnTimeout_ClearsTeamAnswer()
+    {
+        // Act
+        var result = _sut.ResolveGame(GameResolutionType.TNP, "some-answer");
+
+        // Assert
+        result.TeamAnswer.Should().BeNull();
+    }
+
+    [Fact]
+    public void ResolveGame_NotTimeout_PreservesTeamAnswer()
+    {
+        // Act
+        var result = _sut.ResolveGame(GameResolutionType.AP, "my-answer");
+
+        // Assert
+        result.TeamAnswer.Should().Be("my-answer");
+    }
+
+    [Fact]
+    public void ResetScore_SetsScoreToZero()
+    {
+        // Arrange
+        _sut.ResolveGame(GameResolutionType.AP, "answer");
+        _state.CurrentScore.Should().Be(100);
+
+        // Act
+        _sut.ResetScore();
+
+        // Assert
+        _state.CurrentScore.Should().Be(0);
+    }
+
+    #endregion
+}

@@ -1,0 +1,221 @@
+import { useState, useEffect, useRef } from "react";
+import { useChimesConfig } from "../context/ChimesConfigContext";
+import { useTranslation } from "react-i18next";
+import {
+  onTimerUpdate,
+  offTimerUpdate,
+  onSetAnswer,
+  offSetAnswer,
+  onGameResolved,
+  offGameResolved,
+  onProblemUpdate,
+  offProblemUpdate,
+  startTimer,
+  stopTimer,
+  resetTimer,
+} from "../realtime/game";
+
+function GameBox({ isAdmin, gamesRef, timerRef, pointsRef, teamAnswerRef }) {
+  const { t } = useTranslation();
+  const [currentProblem, setCurrentProblem] = useState(null);
+  const [currentBlock, setCurrentBlock] = useState(null);
+  const [countdown, setCountdown] = useState(null);
+  const [teamAnswer, setTeamAnswer] = useState("");
+  const [teamScore, setTeamScore] = useState(0);
+  const [finalAnswer, setFinalAnswer] = useState("");
+  const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
+  const [pointsAwarded, setPointsAwarded] = useState(null);
+  const [showResults, setShowResults] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
+  const { chimesConfig } = useChimesConfig();
+  const countdownAudioRef = useRef(new Audio("/sounds/countdown.mp3"));
+
+  useEffect(() => {
+    const handleUserInteraction = () => setUserInteracted(true);
+    window.addEventListener("click", handleUserInteraction, { once: true });
+    window.addEventListener("keydown", handleUserInteraction, { once: true });
+    return () => {
+      window.removeEventListener("click", handleUserInteraction);
+      window.removeEventListener("keydown", handleUserInteraction);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleTimerUpdate = (newCountdown) => {
+      // eslint-disable-next-line no-console
+      console.debug("[GameBox] TimerUpdate", newCountdown);
+      setCountdown(newCountdown);
+    };
+
+    const handleSetAnswer = (answer) => {
+      // eslint-disable-next-line no-console
+      console.debug("[GameBox] SetAnswer", answer);
+      setTeamAnswer(answer);
+    };
+
+    const handleGameResolved = (resolution) => {
+      // eslint-disable-next-line no-console
+      console.debug("[GameBox] GameResolved", resolution);
+      setFinalAnswer("");
+      setIsAnswerCorrect(null);
+      setPointsAwarded(null);
+
+      setTimeout(() => {
+        setShowResults(true);
+        setFinalAnswer(resolution.teamAnswer);
+
+        setTimeout(() => {
+          setIsAnswerCorrect(resolution.isAnswerCorrect);
+
+          setTimeout(() => {
+            setPointsAwarded(resolution.pointsAwarded);
+            setTeamScore(resolution.currentScore);
+          }, 3000);
+        }, 3000);
+      }, 3000);
+    };
+
+    const handleProblemUpdate = ({ block, problem }) => {
+      // eslint-disable-next-line no-console
+      console.debug("[GameBox] ProblemUpdate", { block, problem });
+      setCurrentBlock(block);
+      setCurrentProblem(problem);
+      setShowResults(false);
+    };
+
+    onTimerUpdate(handleTimerUpdate);
+    onSetAnswer(handleSetAnswer);
+    onGameResolved(handleGameResolved);
+    onProblemUpdate(handleProblemUpdate);
+
+    // eslint-disable-next-line no-console
+    console.debug("[GameBox] event handlers registered");
+
+    return () => {
+      offTimerUpdate(handleTimerUpdate);
+      offSetAnswer(handleSetAnswer);
+      offGameResolved(handleGameResolved);
+      offProblemUpdate(handleProblemUpdate);
+      // eslint-disable-next-line no-console
+      console.debug("[GameBox] event handlers unregistered");
+    };
+  }, []);
+
+  useEffect(() => {
+    if (chimesConfig?.timer && userInteracted) {
+      const gameIsLive = currentBlock && currentProblem;
+      if (gameIsLive && countdown <= 10) {
+        if (!countdownAudioRef.current) {
+          countdownAudioRef.current = new Audio("/sounds/countdown.mp3");
+        }
+        countdownAudioRef.current.play().catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error("Failed to play countdown audio:", error);
+        });
+      } else if (countdownAudioRef.current) {
+        countdownAudioRef.current.pause();
+        countdownAudioRef.current.currentTime = 0;
+      }
+    }
+  }, [countdown, chimesConfig, userInteracted, currentBlock, currentProblem]);
+
+  const handleStartTimer = () => {
+    // eslint-disable-next-line no-console
+    console.debug("[GameBox] StartTimer clicked");
+    startTimer();
+  };
+
+  const handleStopTimer = () => {
+    // eslint-disable-next-line no-console
+    console.debug("[GameBox] StopTimer clicked");
+    stopTimer();
+    countdownAudioRef.current.pause();
+    countdownAudioRef.current.currentTime = 0;
+  };
+
+  const handleResetTimer = () => {
+    // eslint-disable-next-line no-console
+    console.debug("[GameBox] ResetTimer clicked");
+    resetTimer();
+    countdownAudioRef.current.pause();
+    countdownAudioRef.current.currentTime = 0;
+  };
+
+  return (
+    <div className="col-md-6">
+      <div className="card">
+        <div className="card-body">
+          <p className="mb-3">{t("find_the_solution_to_the_problem")}:</p>
+          <div className="fs-2 mb-3" ref={gamesRef}>
+            {currentBlock && currentProblem ? (
+              <img
+                src={`/problems/${currentBlock.name}/${currentProblem}.png`}
+                alt="Problema"
+                className="img-fluid"
+                style={{ maxWidth: "100%", height: "auto" }}
+              />
+            ) : (
+              t("loading_problem")
+            )}
+          </div>
+          {showResults && (
+            <p className="mb-1">
+              <b>
+                {t("team_answer_was")} {finalAnswer}
+              </b>
+            </p>
+          )}
+          {showResults && isAnswerCorrect != null && (
+            <p className="mb-1">
+              <b>
+                {t("the_answer_was")}{" "}
+                {isAnswerCorrect ? t("correct") : t("incorrect")}
+              </b>
+            </p>
+          )}
+          {showResults && pointsAwarded != null && (
+            <p className="mb-1">
+              <b>{t("you_earned_points", { count: pointsAwarded })}</b>
+            </p>
+          )}
+          <p
+            className={`mt-3 ${
+              countdown === 0 ? "text-danger" : ""
+            } ${countdown <= 10 ? "flash-red" : ""}`}
+            ref={timerRef}
+          >
+            {countdown > 0 ? (
+              countdown === 1
+                ? t("1_second_left")
+                : t("n_seconds_left", { count: countdown })
+            ) : (
+              <b>{t("time_is_up")}</b>
+            )}
+          </p>
+          <p className="mb-1" ref={teamAnswerRef}>
+            <b>{t("team_answer")}:</b> {teamAnswer}
+          </p>
+          <p className="mb-1" ref={pointsRef}>
+            <b>{t("points")}:</b> {teamScore}
+          </p>
+
+          {isAdmin && (
+            <div>
+              <button className="btn btn-primary" onClick={handleStartTimer}>
+                {t("start_timer")}
+              </button>
+              <button className="btn btn-danger" onClick={handleStopTimer}>
+                {t("stop_timer")}
+              </button>
+              <button className="btn btn-secondary" onClick={handleResetTimer}>
+                {t("reset_timer")}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default GameBox;
