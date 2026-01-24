@@ -1,4 +1,4 @@
-﻿const languages = [
+const languages = [
   { value: 'pt', label: 'Português', countryCode: 'BR' },
   { value: 'en', label: 'English', countryCode: 'US' }
 ];

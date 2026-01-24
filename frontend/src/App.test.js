@@ -1,9 +1,10 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import { I18nextProvider } from 'react-i18next';
-import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import i18n from 'i18next';
+
+
+import App from './App';
 
 // Mock realtime/game module before imports
 jest.mock('./realtime/game', () => ({
@@ -14,14 +15,25 @@ jest.mock('./realtime/game', () => ({
   setChimes: jest.fn().mockResolvedValue(undefined),
 }));
 
-import App from './App';
-
 // Mock the lazy-loaded pages
-jest.mock('./pages/Experimenter', () => () => <div data-testid="experimenter-page">Experimenter Page</div>);
-jest.mock('./pages/Participant', () => () => <div data-testid="participant-page">Participant Page</div>);
-jest.mock('./pages/Tutorial', () => () => <div data-testid="tutorial-page">Tutorial Page</div>);
+jest.mock('./pages/Experimenter', () => {
+  const MockExperimenter = () => <div data-testid="experimenter-page">Experimenter Page</div>;
+  MockExperimenter.displayName = 'MockExperimenter';
+  return MockExperimenter;
+});
+jest.mock('./pages/Participant', () => {
+  const MockParticipant = () => <div data-testid="participant-page">Participant Page</div>;
+  MockParticipant.displayName = 'MockParticipant';
+  return MockParticipant;
+});
+jest.mock('./pages/Tutorial', () => {
+  const MockTutorial = () => <div data-testid="tutorial-page">Tutorial Page</div>;
+  MockTutorial.displayName = 'MockTutorial';
+  return MockTutorial;
+});
 
 // Initialize test i18n instance
+// eslint-disable-next-line import/no-named-as-default-member
 const testI18n = i18n.createInstance();
 testI18n.use(initReactI18next).init({
   lng: 'en',

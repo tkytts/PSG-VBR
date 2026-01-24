@@ -1,9 +1,12 @@
 import React from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider , initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+
+
+import ChatBox from '../ChatBox';
+import { ChimesConfigProvider } from '../../context/ChimesConfigContext';
 
 // Mock realtime/game module before imports
 jest.mock('../../realtime/game', () => ({
@@ -26,12 +29,10 @@ jest.mock('../../realtime/game', () => ({
   setChimes: jest.fn().mockResolvedValue(undefined),
 }));
 
-import ChatBox from '../ChatBox';
-import { ChimesConfigProvider } from '../../context/ChimesConfigContext';
-
 const gameModule = require('../../realtime/game');
 
 // Initialize test i18n instance
+// eslint-disable-next-line import/no-named-as-default-member
 const testI18n = i18n.createInstance();
 testI18n.use(initReactI18next).init({
   lng: 'en',

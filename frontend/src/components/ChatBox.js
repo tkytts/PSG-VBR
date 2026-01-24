@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { useChimesConfig } from "../context/ChimesConfigContext";
 import { useTranslation } from "react-i18next";
+
+import { useChimesConfig } from "../context/ChimesConfigContext";
 import {
   onReceiveMessage,
   offReceiveMessage,

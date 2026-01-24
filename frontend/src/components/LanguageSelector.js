@@ -1,7 +1,9 @@
 import React from "react";
 import Select from "react-select";
+// eslint-disable-next-line import/no-named-as-default
 import ReactCountryFlag from "react-country-flag";
 import { useTranslation } from "react-i18next";
+
 import languages from "../constants/languages";
 
 const formatOptionLabel = ({ countryCode, label }) => (

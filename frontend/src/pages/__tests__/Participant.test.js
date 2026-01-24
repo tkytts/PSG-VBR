@@ -1,5 +1,6 @@
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
 import Participant from '../Participant';
 import { renderWithProviders } from '../../test-utils/test-utils';
 
@@ -159,8 +160,8 @@ describe('Participant Component', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('chat-box')).toBeInTheDocument();
-        expect(screen.getByTestId('game-box')).toBeInTheDocument();
       });
+      expect(screen.getByTestId('game-box')).toBeInTheDocument();
     });
 
     it('should pass correct props to ChatBox', async () => {
@@ -171,10 +172,11 @@ describe('Participant Component', () => {
       await userEvent.click(screen.getByRole('button'));
 
       await waitFor(() => {
-        const chatBox = screen.getByTestId('chat-box');
-        expect(chatBox).toHaveTextContent('User: Test User');
-        expect(chatBox).toHaveTextContent('Admin: false');
+        expect(screen.getByTestId('chat-box')).toBeInTheDocument();
       });
+      const chatBox = screen.getByTestId('chat-box');
+      expect(chatBox).toHaveTextContent('User: Test User');
+      expect(chatBox).toHaveTextContent('Admin: false');
     });
 
     it('should pass isAdmin=false to GameBox', async () => {
@@ -379,8 +381,8 @@ describe('Participant Component', () => {
       // Should show ready modal again
       await waitFor(() => {
         expect(screen.getByText('Second Confederate')).toBeInTheDocument();
-        expect(screen.getAllByRole('button').length).toBeGreaterThan(0);
       });
+      expect(screen.getAllByRole('button').length).toBeGreaterThan(0);
     });
   });
 });

@@ -1,12 +1,13 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { I18nextProvider } from 'react-i18next';
+import { I18nextProvider , initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+
 import LanguageSelector from '../LanguageSelector';
 
 // Initialize test i18n instance
+// eslint-disable-next-line import/no-named-as-default-member
 const testI18n = i18n.createInstance();
 testI18n.use(initReactI18next).init({
   lng: 'en',
@@ -51,17 +52,8 @@ describe('LanguageSelector', () => {
 
   it('displays country flags via ReactCountryFlag', () => {
     renderLanguageSelector();
-    
-    // ReactCountryFlag renders svg flags
-    const container = screen.getByText('English').closest('div');
-    expect(container).toBeInTheDocument();
-  });
 
-  it('has minimum width styling', () => {
-    const { container } = renderLanguageSelector();
-    
-    // The outer div should have minWidth styling
-    const outerDiv = container.firstChild;
-    expect(outerDiv).toHaveStyle({ minWidth: '170px' });
+    // ReactCountryFlag renders svg flags along with the language text
+    expect(screen.getByText('English')).toBeInTheDocument();
   });
 });

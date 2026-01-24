@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useNavigate } from 'react-router-dom';
+
 import Tutorial from '../Tutorial';
 import { renderWithProviders } from '../../test-utils/test-utils';
 
@@ -207,9 +207,9 @@ describe('Tutorial Component', () => {
       await userEvent.click(buttons[0]);
 
       await waitFor(() => {
-        expect(screen.queryByTestId('chat-box')).toBeInTheDocument();
-        expect(screen.queryByTestId('game-box')).toBeInTheDocument();
+        expect(screen.getByTestId('chat-box')).toBeInTheDocument();
       });
+      expect(screen.getByTestId('game-box')).toBeInTheDocument();
     });
 
     it('should set username when tutorial starts', async () => {
@@ -285,8 +285,8 @@ describe('Tutorial Component', () => {
       // Should call tutorial setup functions
       await waitFor(() => {
         expect(mockFunctions.setMaxTime).toHaveBeenCalled();
-        expect(mockFunctions.setChimes).toHaveBeenCalled();
       });
+      expect(mockFunctions.setChimes).toHaveBeenCalled();
     });
   });
 

@@ -1,6 +1,9 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+
 import { ChimesConfigProvider, useChimesConfig } from '../ChimesConfigContext';
+// Import after mocking
+import * as gameModule from '../../realtime/game';
 
 // Mock the realtime/game module
 jest.mock('../../realtime/game', () => ({
@@ -10,9 +13,6 @@ jest.mock('../../realtime/game', () => ({
   getChimes: jest.fn().mockResolvedValue(undefined),
   setChimes: jest.fn().mockResolvedValue(undefined),
 }));
-
-// Import after mocking
-import * as gameModule from '../../realtime/game';
 
 // Test component that uses the context
 const TestConsumer = () => {
@@ -41,12 +41,13 @@ describe('ChimesConfigContext', () => {
         <TestConsumer />
       </ChimesConfigProvider>
     );
-    
+
     await waitFor(() => {
-      expect(screen.getByTestId('messageSent')).toHaveTextContent('true');
-      expect(screen.getByTestId('messageReceived')).toHaveTextContent('true');
-      expect(screen.getByTestId('timer')).toHaveTextContent('true');
+      expect(screen.getByTestId('messageSent')).toBeInTheDocument();
     });
+    expect(screen.getByTestId('messageSent')).toHaveTextContent('true');
+    expect(screen.getByTestId('messageReceived')).toHaveTextContent('true');
+    expect(screen.getByTestId('timer')).toHaveTextContent('true');
   });
 
   it('registers chimes update handler on mount', async () => {

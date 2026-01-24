@@ -1,5 +1,6 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
 import Experimenter from '../Experimenter';
 import { renderWithProviders } from '../../test-utils/test-utils';
 
@@ -98,12 +99,13 @@ describe('Experimenter Component', () => {
       renderWithProviders(<Experimenter />);
 
       await waitFor(() => {
-        const chatBox = screen.getByTestId('chat-box');
-        const gameBox = screen.getByTestId('game-box');
-
-        expect(chatBox).toHaveTextContent('Admin: true');
-        expect(gameBox).toHaveTextContent('Admin: true');
+        expect(screen.getByTestId('chat-box')).toBeInTheDocument();
       });
+      const chatBox = screen.getByTestId('chat-box');
+      const gameBox = screen.getByTestId('game-box');
+
+      expect(chatBox).toHaveTextContent('Admin: true');
+      expect(gameBox).toHaveTextContent('Admin: true');
     });
 
     it('should render control buttons', () => {

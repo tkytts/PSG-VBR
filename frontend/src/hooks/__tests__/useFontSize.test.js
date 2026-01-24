@@ -1,4 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
+
 import { useFontSize } from '../useFontSize';
 
 describe('useFontSize', () => {
