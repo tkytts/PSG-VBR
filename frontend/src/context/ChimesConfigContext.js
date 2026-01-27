@@ -45,7 +45,8 @@ export function ChimesConfigProvider({ children }) {
     // Request chimes once connection is ready
     connectionReady
       .then(() => getChimes())
-      .catch((err) => {
+      .catch(() => {
+        // Silently ignore - initial chimes fetch failure is non-critical
       });
 
     return () => {
@@ -57,7 +58,8 @@ export function ChimesConfigProvider({ children }) {
     setChimesConfig(newConfig);
     try {
       await setChimes(newConfig);
-    } catch (error) {
+    } catch {
+      // Silently ignore - chimes sync failure is non-critical
     }
   };
 
