@@ -60,7 +60,7 @@ function Experimenter() {
   useEffect(() => {
     const loadConfederates = async () => {
       try {
-        const { femaleData, maleData } = await getConfederatesStart();
+        const { femaleData = [], maleData = [] } = await getConfederatesStart() || {};
         setConfederatesFemaleStart(femaleData);
         setConfederatesMaleStart(maleData);
       } catch (error) {
