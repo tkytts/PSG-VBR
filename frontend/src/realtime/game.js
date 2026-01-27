@@ -5,8 +5,6 @@ const onSafe = (eventName, handler) => {
   if (!handler) {
     return;
   }
-  // eslint-disable-next-line no-console
-  console.debug(`[realtime/game] registering handler for ${eventName}`);
   connection.on(eventName, handler);
 };
 
@@ -14,8 +12,6 @@ const offSafe = (eventName, handler) => {
   if (!handler) {
     return;
   }
-  // eslint-disable-next-line no-console
-  console.debug(`[realtime/game] unregistering handler for ${eventName}`);
   connection.off(eventName, handler);
 };
 
