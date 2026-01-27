@@ -182,11 +182,13 @@ function Experimenter() {
   };
 
   const resolveGame = (gameResolutionType) => {
-    if (!teamAnswer && gameResolutionType !== RESOLUTION_TYPES.TNP) {
+    let isTimeoutResolution = gameResolutionType === RESOLUTION_TYPES.TNP;
+
+    if (!teamAnswer && !isTimeoutResolution) {
       alert(t("please_provide_team_answer"));
       return;
     }
-    setGameResolution({ gameResolutionType, teamAnswer });
+    setGameResolution({ gameResolutionType, teamAnswer: isTimeoutResolution ? "" : teamAnswer });
     closeResolutionModal();
   };
 
