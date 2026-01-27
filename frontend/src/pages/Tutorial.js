@@ -227,7 +227,7 @@ function Tutorial() {
     setTutorialStep(20);
     setConfederate(simulationConfederate);
     setCurrentUser(t("tutorial_participant_3"));
-    tutorialProblem({ block: { blockName: "T_1" }, Problem: "3" });
+    tutorialProblem({ block: { Name: "T_1" }, Problem: "3" });
   };
 
   const handleTutorialStep20 = () => {
@@ -255,11 +255,18 @@ function Tutorial() {
   };
 
   useEffect(() => {
+    const pattern =
+      tutorialStep === 23
+        ? new RegExp(
+            "^" + t("arrow_up_green_pattern").replace(/\s+/g, "\\s*") + "$",
+            "i"
+          )
+        : null;
+
     const handleMessage = (message) => {
-      if (tutorialStep === 23) {
-        const expected = t("arrow_up_green").toLowerCase().replace(/\s+/g, "");
-        const received = message.text.toLowerCase().replace(/\s+/g, "");
-        if (received === expected) {
+      if (tutorialStep === 23 && pattern) {
+        const received = message.text.trim();
+        if (pattern.test(received)) {
           setWrongAnswer(0);
           setTutorialStep(24);
         } else {

@@ -43,20 +43,14 @@ function GameBox({ isAdmin, gamesRef, timerRef, pointsRef, teamAnswerRef }) {
 
   useEffect(() => {
     const handleTimerUpdate = (newCountdown) => {
-      // eslint-disable-next-line no-console
-      console.debug("[GameBox] TimerUpdate", newCountdown);
       setCountdown(newCountdown);
     };
 
     const handleSetAnswer = (answer) => {
-      // eslint-disable-next-line no-console
-      console.debug("[GameBox] SetAnswer", answer);
       setTeamAnswer(answer);
     };
 
     const handleGameResolved = (resolution) => {
-      // eslint-disable-next-line no-console
-      console.debug("[GameBox] GameResolved", resolution);
       setFinalAnswer("");
       setIsAnswerCorrect(null);
       setPointsAwarded(null);
@@ -73,12 +67,10 @@ function GameBox({ isAdmin, gamesRef, timerRef, pointsRef, teamAnswerRef }) {
             setTeamScore(resolution.currentScore);
           }, 3000);
         }, 3000);
-      }, 3000);
+      }, (countdown * 1000) + 3000); // converting seconds to milliseconds
     };
 
     const handleProblemUpdate = ({ block, problem }) => {
-      // eslint-disable-next-line no-console
-      console.debug("[GameBox] ProblemUpdate", { block, problem });
       setCurrentBlock(block);
       setCurrentProblem(problem);
       setShowResults(false);
@@ -89,16 +81,11 @@ function GameBox({ isAdmin, gamesRef, timerRef, pointsRef, teamAnswerRef }) {
     onGameResolved(handleGameResolved);
     onProblemUpdate(handleProblemUpdate);
 
-    // eslint-disable-next-line no-console
-    console.debug("[GameBox] event handlers registered");
-
     return () => {
       offTimerUpdate(handleTimerUpdate);
       offSetAnswer(handleSetAnswer);
       offGameResolved(handleGameResolved);
       offProblemUpdate(handleProblemUpdate);
-      // eslint-disable-next-line no-console
-      console.debug("[GameBox] event handlers unregistered");
     };
   }, []);
 
@@ -110,8 +97,6 @@ function GameBox({ isAdmin, gamesRef, timerRef, pointsRef, teamAnswerRef }) {
           countdownAudioRef.current = new Audio("/sounds/countdown.mp3");
         }
         countdownAudioRef.current.play().catch((error) => {
-          // eslint-disable-next-line no-console
-          console.error("Failed to play countdown audio:", error);
         });
       } else if (countdownAudioRef.current) {
         countdownAudioRef.current.pause();
@@ -121,22 +106,16 @@ function GameBox({ isAdmin, gamesRef, timerRef, pointsRef, teamAnswerRef }) {
   }, [countdown, chimesConfig, userInteracted, currentBlock, currentProblem]);
 
   const handleStartTimer = () => {
-    // eslint-disable-next-line no-console
-    console.debug("[GameBox] StartTimer clicked");
     startTimer();
   };
 
   const handleStopTimer = () => {
-    // eslint-disable-next-line no-console
-    console.debug("[GameBox] StopTimer clicked");
     stopTimer();
     countdownAudioRef.current.pause();
     countdownAudioRef.current.currentTime = 0;
   };
 
   const handleResetTimer = () => {
-    // eslint-disable-next-line no-console
-    console.debug("[GameBox] ResetTimer clicked");
     resetTimer();
     countdownAudioRef.current.pause();
     countdownAudioRef.current.currentTime = 0;

@@ -143,17 +143,17 @@ h2, .h2 { font-size: var(--font-size-lg); }
   border-color: var(--color-accent-hover);
 }
 
-/* Secondary button - outline style */
+/* Secondary button - subtle gray background */
 .btn-secondary {
-  background-color: transparent;
-  border-color: var(--color-border);
+  background-color: #E5E7EB;
+  border-color: #D1D5DB;
   color: var(--color-text-primary);
 }
 
 .btn-secondary:hover,
 .btn-secondary:focus {
-  background-color: var(--color-border-subtle);
-  border-color: var(--color-border);
+  background-color: #D1D5DB;
+  border-color: #9CA3AF;
   color: var(--color-text-primary);
 }
 
@@ -176,16 +176,17 @@ h2, .h2 { font-size: var(--font-size-lg); }
   color: white;
 }
 
-/* Danger button */
+/* Danger button - red background */
 .btn-danger {
-  background-color: transparent;
-  border-color: var(--color-error);
-  color: var(--color-error);
-}
-
-.btn-danger:hover {
   background-color: var(--color-error);
   border-color: var(--color-error);
+  color: white;
+}
+
+.btn-danger:hover,
+.btn-danger:focus {
+  background-color: #C0392B;
+  border-color: #C0392B;
   color: white;
 }
 
