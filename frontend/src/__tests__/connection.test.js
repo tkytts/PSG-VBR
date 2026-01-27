@@ -1,0 +1,150 @@
+describe('connection module', () => {
+  let mockOn;
+  let mockOff;
+  let mockStart;
+  let mockInvoke;
+  let mockOnreconnected;
+  let mockWithUrl;
+  let mockWithAutomaticReconnect;
+  let mockConfigureLogging;
+
+  beforeEach(() => {
+    jest.resetModules();
+
+    // Setup fresh mocks for each test
+    mockOn = jest.fn();
+    mockOff = jest.fn();
+    mockStart = jest.fn();
+    mockInvoke = jest.fn();
+    mockOnreconnected = jest.fn();
+    mockWithUrl = jest.fn().mockReturnThis();
+    mockWithAutomaticReconnect = jest.fn().mockReturnThis();
+    mockConfigureLogging = jest.fn().mockReturnThis();
+
+    const mockConnection = {
+      on: mockOn,
+      off: mockOff,
+      start: mockStart,
+      invoke: mockInvoke,
+      onreconnected: mockOnreconnected
+    };
+
+    // Mock SignalR with doMock (works with resetModules)
+    jest.doMock('@microsoft/signalr', () => ({
+      HubConnectionBuilder: jest.fn(() => ({
+        withUrl: mockWithUrl,
+        withAutomaticReconnect: mockWithAutomaticReconnect,
+        configureLogging: mockConfigureLogging,
+        build: jest.fn(() => mockConnection)
+      })),
+      LogLevel: {
+        Debug: 1
+      }
+    }));
+
+    // Mock config
+    jest.doMock('../config', () => ({
+      __esModule: true,
+      default: { hubUrl: 'http://test-server/gamehub' }
+    }));
+
+    // Suppress console output during tests
+    jest.spyOn(console, 'log').mockImplementation();
+    jest.spyOn(console, 'error').mockImplementation();
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    jest.clearAllMocks();
+  });
+
+  it('builds connection with correct hub URL', () => {
+    mockStart.mockResolvedValueOnce(undefined);
+
+    require('../connection');
+
+    expect(mockWithUrl).toHaveBeenCalledWith('http://test-server/gamehub');
+  });
+
+  it('enables automatic reconnect', () => {
+    mockStart.mockResolvedValueOnce(undefined);
+
+    require('../connection');
+
+    expect(mockWithAutomaticReconnect).toHaveBeenCalled();
+  });
+
+  it('configures debug logging', () => {
+    mockStart.mockResolvedValueOnce(undefined);
+
+    require('../connection');
+
+    expect(mockConfigureLogging).toHaveBeenCalledWith(1); // LogLevel.Debug
+  });
+
+  it('starts connection on module load', () => {
+    mockStart.mockResolvedValueOnce(undefined);
+
+    require('../connection');
+
+    expect(mockStart).toHaveBeenCalled();
+  });
+
+  it('exports connectionReady promise', async () => {
+    mockStart.mockResolvedValueOnce(undefined);
+
+    const { connectionReady } = require('../connection');
+
+    await expect(connectionReady).resolves.toBeUndefined();
+  });
+
+  it('adds emit alias to connection', () => {
+    mockStart.mockResolvedValueOnce(undefined);
+
+    const connection = require('../connection').default;
+
+    expect(connection.emit).toBeDefined();
+  });
+
+  it('logs connection success', async () => {
+    mockStart.mockResolvedValueOnce(undefined);
+
+    require('../connection');
+
+    // Wait for promise to resolve
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(console.log).toHaveBeenCalledWith('SignalR connected');
+  });
+
+  it('logs and rethrows connection error', async () => {
+    const error = new Error('Connection failed');
+    mockStart.mockRejectedValueOnce(error);
+
+    const { connectionReady } = require('../connection');
+
+    await expect(connectionReady).rejects.toThrow('Connection failed');
+    expect(console.error).toHaveBeenCalledWith('SignalR connection error:', error);
+  });
+
+  describe('invoke override', () => {
+    it('waits for connection before invoking', async () => {
+      let resolveStart;
+      mockStart.mockReturnValueOnce(new Promise(resolve => {
+        resolveStart = resolve;
+      }));
+      mockInvoke.mockResolvedValueOnce('result');
+
+      const connection = require('../connection').default;
+
+      // Start invoke (should wait for connection)
+      const invokePromise = connection.invoke('TestMethod', 'arg1');
+
+      // Resolve connection
+      resolveStart();
+
+      const result = await invokePromise;
+      expect(result).toBe('result');
+    });
+  });
+});
