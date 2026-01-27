@@ -6,7 +6,6 @@ describe('connection module', () => {
   let mockOnreconnected;
   let mockWithUrl;
   let mockWithAutomaticReconnect;
-  let mockConfigureLogging;
 
   beforeEach(() => {
     jest.resetModules();
@@ -19,7 +18,6 @@ describe('connection module', () => {
     mockOnreconnected = jest.fn();
     mockWithUrl = jest.fn().mockReturnThis();
     mockWithAutomaticReconnect = jest.fn().mockReturnThis();
-    mockConfigureLogging = jest.fn().mockReturnThis();
 
     const mockConnection = {
       on: mockOn,
@@ -34,12 +32,8 @@ describe('connection module', () => {
       HubConnectionBuilder: jest.fn(() => ({
         withUrl: mockWithUrl,
         withAutomaticReconnect: mockWithAutomaticReconnect,
-        configureLogging: mockConfigureLogging,
         build: jest.fn(() => mockConnection)
-      })),
-      LogLevel: {
-        Debug: 1
-      }
+      }))
     }));
 
     // Mock config
@@ -47,14 +41,9 @@ describe('connection module', () => {
       __esModule: true,
       default: { hubUrl: 'http://test-server/gamehub' }
     }));
-
-    // Suppress console output during tests
-    jest.spyOn(console, 'log').mockImplementation();
-    jest.spyOn(console, 'error').mockImplementation();
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
     jest.clearAllMocks();
   });
 
@@ -72,14 +61,6 @@ describe('connection module', () => {
     require('../connection');
 
     expect(mockWithAutomaticReconnect).toHaveBeenCalled();
-  });
-
-  it('configures debug logging', () => {
-    mockStart.mockResolvedValueOnce(undefined);
-
-    require('../connection');
-
-    expect(mockConfigureLogging).toHaveBeenCalledWith(1); // LogLevel.Debug
   });
 
   it('starts connection on module load', () => {
@@ -106,25 +87,13 @@ describe('connection module', () => {
     expect(connection.emit).toBeDefined();
   });
 
-  it('logs connection success', async () => {
-    mockStart.mockResolvedValueOnce(undefined);
-
-    require('../connection');
-
-    // Wait for promise to resolve
-    await new Promise(resolve => setTimeout(resolve, 0));
-
-    expect(console.log).toHaveBeenCalledWith('SignalR connected');
-  });
-
-  it('logs and rethrows connection error', async () => {
+  it('rejects connectionReady on connection error', async () => {
     const error = new Error('Connection failed');
     mockStart.mockRejectedValueOnce(error);
 
     const { connectionReady } = require('../connection');
 
     await expect(connectionReady).rejects.toThrow('Connection failed');
-    expect(console.error).toHaveBeenCalledWith('SignalR connection error:', error);
   });
 
   describe('invoke override', () => {

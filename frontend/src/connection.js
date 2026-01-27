@@ -2,25 +2,13 @@ import * as signalR from "@microsoft/signalr";
 
 import config from "./config";
 
-// eslint-disable-next-line no-console
-console.log("Config:", config);
-// eslint-disable-next-line no-console
-console.log("Hub URL:", config.hubUrl);
-
 const connection = new signalR.HubConnectionBuilder()
   .withUrl(config.hubUrl)
   .withAutomaticReconnect()
-  .configureLogging(signalR.LogLevel.Debug) // Add debug logging
   .build();
 
 // start once and keep the promise so callers can await it
-const startPromise = connection.start()
-  // eslint-disable-next-line no-console
-  .then(() => console.log("SignalR connected"))
-  .catch(err => {
-    console.error("SignalR connection error:", err);
-    throw err;
-  });
+const startPromise = connection.start();
 
 // preserve original invoke
 const originalInvoke = connection.invoke.bind(connection);
@@ -31,14 +19,7 @@ connection.invoke = async (...args) => {
     await startPromise;
   } catch (startErr) {
     // if initial start failed, try to start again before invoking
-    try {
-      await connection.start();
-      // eslint-disable-next-line no-console
-      console.log("SignalR re-started before invoke");
-    } catch (err) {
-      console.error("SignalR failed to start before invoke:", err);
-      throw err;
-    }
+    await connection.start();
   }
   return originalInvoke(...args);
 };
