@@ -181,7 +181,7 @@ describe('Tutorial Component', () => {
 
       // Should call tutorial setup functions
       await waitFor(() => {
-        expect(mockFunctions.setMaxTime).toHaveBeenCalledWith(90);
+        expect(mockFunctions.setMaxTime).toHaveBeenCalledWith(75);
       });
     });
 
