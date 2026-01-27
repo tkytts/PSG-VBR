@@ -87,7 +87,7 @@ function GameBox({ isAdmin, gamesRef, timerRef, pointsRef, teamAnswerRef }) {
       offGameResolved(handleGameResolved);
       offProblemUpdate(handleProblemUpdate);
     };
-  }, []);
+  }, [countdown]);
 
   useEffect(() => {
     if (chimesConfig?.timer && userInteracted) {
