@@ -45,6 +45,8 @@ Frontend runs at `http://localhost:3000`
 | [Frontend README](./frontend/README.md) | React app setup, routes, and testing |
 | [Backend README](./backend/README.md) | API endpoints, SignalR events, configuration |
 | [Contributing Guidelines](./CONTRIBUTING.md) | Coding standards and PR process |
+| [E2E Testing Guide](./frontend/E2E-TESTING.md) | Playwright end-to-end tests |
+| [Minimal Theme Guide](./frontend/MINIMAL-THEME-GUIDE.md) | UI theme customization |
 
 ## Features
 
@@ -53,6 +55,8 @@ Frontend runs at `http://localhost:3000`
 - **Role-based Views** - Separate interfaces for participants and experimenters
 - **Game State Management** - Timer, scoring, and problem navigation
 - **Research Telemetry** - CSV logging for data collection
+- **Configurable Audio Cues** - Chimes for messages, timer events
+- **E2E Testing** - Playwright tests for complete workflows
 
 ## Configuration
 

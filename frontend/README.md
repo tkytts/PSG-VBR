@@ -41,33 +41,37 @@ REACT_APP_HUB_URL=http://localhost:5000/api/gamehub
 | `npm test` | Run tests in watch mode |
 | `npm run test:ci` | Run tests once (CI mode) |
 | `npm run test:coverage` | Run tests with coverage report |
+| `npm run test:e2e` | Run E2E tests (Playwright) |
+| `npm run test:e2e:headed` | Run E2E tests with browser visible |
 | `npm run build` | Create production build |
 
 ## Architecture
 
 ```
 src/
-??? api/           # Backend API clients (client.js, users.js)
-??? data/          # Static data loaders (confederates.js)
-??? components/    # Reusable UI components (Modal, ChatBox, GameBox, etc.)
-??? pages/         # Route-level components (Experimenter, Participant, Tutorial)
-??? realtime/      # SignalR helpers (game.js)
-??? hooks/         # Custom React hooks (useFontSize.js)
-??? context/       # React Context providers (ChimesConfigContext.js)
-??? constants/     # Application constants (resolutionTypes.js, languages.js)
-??? locales/       # Translation files (en, pt)
-??? __tests__/     # App-level tests
-??? __mocks__/     # Jest module mocks
-??? test-utils/    # Test utilities
-??? config.js      # Environment-aware configuration
-??? i18n.js        # i18next initialization
+├── api/           # Backend API clients (client.js, users.js)
+├── data/          # Static data loaders (confederates.js)
+├── components/    # Reusable UI components (Modal, ChatBox, GameBox, etc.)
+├── pages/         # Route-level components (Experimenter, Participant, Tutorial)
+├── realtime/      # SignalR helpers (game.js)
+├── hooks/         # Custom React hooks (useFontSize.js)
+├── context/       # React Context providers (ChimesConfigContext.js)
+├── constants/     # Application constants (resolutionTypes.js, languages.js)
+├── locales/       # Translation files (en, pt)
+├── styles/        # CSS and theme files (minimal-theme.css)
+├── __tests__/     # App-level tests
+├── __mocks__/     # Jest module mocks
+├── test-utils/    # Test utilities
+├── config.js      # Environment-aware configuration
+├── connection.js  # SignalR connection singleton
+└── i18n.js        # i18next initialization
 ```
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for detailed coding standards and guidelines.
 
 ## Testing
 
-The test suite includes 89 tests across 13 test suites covering components, hooks, context, and utilities.
+The test suite includes 240+ tests across 22 test suites covering components, hooks, context, pages, API clients, and utilities.
 
 ```bash
 npm test                # Interactive watch mode
@@ -80,10 +84,14 @@ npm run test:coverage   # With coverage report
 | Area | Tests |
 |------|-------|
 | Components | ChatBox, GameBox, Modal, FontSizeControls, LanguageSelector, InputModal, ErrorBoundary |
+| Pages | Participant, Experimenter, Tutorial |
 | Hooks | useFontSize |
 | Context | ChimesConfigContext |
+| API | client, users |
+| Data | confederates |
+| Realtime | game (SignalR) |
 | Constants | config, languages, resolutionTypes |
-| App | Routing, font controls |
+| App | Routing, i18n, connection |
 
 ## Internationalization
 
@@ -108,3 +116,5 @@ Translation files are in `src/locales/{lang}/translation.json`.
 - [Project Overview](../README.md)
 - [Backend API Documentation](../backend/README.md)
 - [Contributing Guidelines](../CONTRIBUTING.md)
+- [E2E Testing Guide](./E2E-TESTING.md)
+- [Minimal Theme Guide](./MINIMAL-THEME-GUIDE.md)

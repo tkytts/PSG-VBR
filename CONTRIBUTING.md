@@ -11,10 +11,10 @@ Thank you for contributing to the Experiment Platform!
 ## Project Structure
 
 ```
-??? frontend/          # React application
-??? backend/           # .NET 8 API with SignalR
-??? README.md          # Project overview
-??? CONTRIBUTING.md    # This file
+├── frontend/          # React application
+├── backend/           # .NET 8 API with SignalR
+├── README.md          # Project overview
+└── CONTRIBUTING.md    # This file
 ```
 
 ## Development Workflow
@@ -61,27 +61,33 @@ dotnet test
 
 ```
 frontend/src/
-??? api/               # Backend API clients
-?   ??? client.js      # Base HTTP client
-?   ??? users.js       # User API endpoints
-??? data/              # Static data loaders (public folder assets)
-?   ??? confederates.js
-??? components/        # Reusable UI components
-?   ??? __tests__/     # Component tests
-??? pages/             # Route-level components
-??? realtime/          # SignalR helpers
-??? hooks/             # Custom React hooks
-?   ??? __tests__/     # Hook tests
-??? context/           # React Context providers
-?   ??? __tests__/     # Context tests
-??? constants/         # Application constants
-?   ??? __tests__/     # Constants tests
-??? locales/           # Translation files (en, pt)
-??? __tests__/         # App-level tests
-??? __mocks__/         # Jest mocks
-??? test-utils/        # Test utilities
-??? config.js          # Environment configuration
-??? i18n.js            # i18next initialization
+├── api/               # Backend API clients
+│   ├── __tests__/     # API client tests
+│   ├── client.js      # Base HTTP client
+│   └── users.js       # User API endpoints
+├── data/              # Static data loaders (public folder assets)
+│   ├── __tests__/     # Data loader tests
+│   └── confederates.js
+├── components/        # Reusable UI components
+│   └── __tests__/     # Component tests
+├── pages/             # Route-level components
+│   └── __tests__/     # Page tests
+├── realtime/          # SignalR helpers
+│   └── __tests__/     # Realtime tests
+├── hooks/             # Custom React hooks
+│   └── __tests__/     # Hook tests
+├── context/           # React Context providers
+│   └── __tests__/     # Context tests
+├── constants/         # Application constants
+│   └── __tests__/     # Constants tests
+├── locales/           # Translation files (en, pt)
+├── styles/            # CSS and theme files
+├── __tests__/         # App-level tests
+├── __mocks__/         # Jest mocks
+├── test-utils/        # Test utilities
+├── config.js          # Environment configuration
+├── connection.js      # SignalR connection singleton
+└── i18n.js            # i18next initialization
 ```
 
 ### Naming Conventions
@@ -123,10 +129,10 @@ The backend follows **Clean Architecture** principles:
 
 ```
 backend/src/
-??? GameServer.Api/            # Controllers, SignalR hub
-??? GameServer.Application/    # Services, DTOs, interfaces
-??? GameServer.Domain/         # Entities, enums
-??? GameServer.Infrastructure/ # Repositories, file I/O
+├── GameServer.Api/            # Controllers, SignalR hub
+├── GameServer.Application/    # Services, DTOs, interfaces
+├── GameServer.Domain/         # Entities, enums
+└── GameServer.Infrastructure/ # Repositories, file I/O
 ```
 
 ### Naming Conventions

@@ -81,15 +81,28 @@ backend/
 | `SendMessage` | `ChatMessageDto` | Send chat message |
 | `Typing` | `string username` | Notify typing |
 | `ClearChat` | - | Clear and save chat |
+| `UpdateProblemSelection` | `ProblemSelectionDto` | Update current problem selection |
 | `FirstBlock` | - | Go to first block |
 | `NextBlock` | - | Go to next block |
 | `NextProblem` | - | Go to next problem |
+| `TutorialProblem` | `ProblemUpdateDto` | Send tutorial problem update |
 | `StartTimer` | - | Start countdown |
 | `StopTimer` | - | Stop countdown |
 | `ResetTimer` | - | Reset countdown |
+| `SetMaxTime` | `int time` | Set timer duration |
 | `StartGame` | - | Start game session |
 | `StopGame` | - | Stop game session |
-| `SetGameResolution` | `SetGameResolutionDto` | Resolve game round |
+| `SetGameResolution` | `SetGameResolutionDto` | Set resolution type and answer |
+| `ResetPoints` | - | Reset score to zero |
+| `SetPointsAwarded` | `int points` | Set points per correct answer |
+| `ClearAnswer` | - | Clear answer display |
+| `SetAnswer` | `string answer` | Set answer display |
+| `BlockFinished` | - | Signal block completion |
+| `GameEnded` | - | Signal game end |
+| `SetChimes` | `ChimesConfigDto` | Set chimes configuration |
+| `GetChimes` | - | Broadcast chimes config |
+| `TelemetryEvent` | `TelemetryEventDto` | Save telemetry event |
+| `TutorialDone` | `int numTries` | Record tutorial completion |
 
 #### Server → Client Events
 
@@ -101,9 +114,13 @@ backend/
 | `ProblemUpdate` | `ProblemUpdateDto` | Problem changed |
 | `TimerUpdate` | `int` | Timer tick |
 | `StatusUpdate` | `bool` | Game live status |
-| `GameResolved` | `GameResolutionDto` | Round resolved |
+| `GameResolved` | `GameResolutionDto` | Round resolved (sent by timer service) |
 | `PointsUpdate` | `int` | Score changed |
 | `NewConfederate` | `string` | Confederate changed |
+| `SetAnswer` | `string` | Answer display updated |
+| `ShowEndModal` | - | Game ended, show end screen |
+| `ChimesUpdated` | `ChimesConfigDto` | Chimes configuration updated |
+| `TutorialDone` | `int` | Tutorial completed with try count |
 
 ## Configuration
 
