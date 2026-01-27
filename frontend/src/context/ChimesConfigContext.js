@@ -46,8 +46,6 @@ export function ChimesConfigProvider({ children }) {
     connectionReady
       .then(() => getChimes())
       .catch((err) => {
-        // eslint-disable-next-line no-console
-        console.error("Failed to request chimes:", err);
       });
 
     return () => {
@@ -60,8 +58,6 @@ export function ChimesConfigProvider({ children }) {
     try {
       await setChimes(newConfig);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error("Failed to update chimes:", error);
     }
   };
 

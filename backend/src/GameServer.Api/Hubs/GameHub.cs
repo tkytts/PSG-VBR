@@ -178,30 +178,10 @@ public class GameHub : Hub
     /// <summary>
     /// Starts the game timer.
     /// </summary>
-    public async Task StartTimer()
+    public Task StartTimer()
     {
         _timerService.Start();
-
-        // Set up timer tick broadcasting
-        // Note: For production, use a background service with IHubContext
-        _ = Task.Run(async () =>
-        {
-            while (_timerService.IsRunning)
-            {
-                await Clients.All.SendAsync("TimerUpdate", _timerService.CurrentCountdown);
-                await Task.Delay(1000);
-
-                if (_timerService.CurrentCountdown <= 0)
-                {
-                    var resolutionType = _gameService.State.PendingResolutionType ?? GameResolutionType.TNP;
-                    var teamAnswer = _gameService.State.TeamAnswer;
-                    await ResolveGameInternal(resolutionType, teamAnswer);
-                    _gameService.State.PendingResolutionType = null;
-                    _gameService.State.TeamAnswer = null;
-                    break;
-                }
-            }
-        });
+        return Task.CompletedTask;
     }
 
     /// <summary>
@@ -319,28 +299,6 @@ public class GameHub : Hub
     public async Task GameEnded()
     {
         await Clients.All.SendAsync("ShowEndModal");
-    }
-
-    private async Task ResolveGameInternal(GameResolutionType resolutionType, string? teamAnswer)
-    {
-        var resolution = _gameService.ResolveGame(resolutionType, teamAnswer);
-
-        await _telemetryRepository.SaveAsync(new TelemetryEvent
-        {
-            User = _gameService.State.ParticipantName ?? "Unknown",
-            Confederate = _gameService.State.ConfederateName,
-            Action = "game resolved",
-            Resolution = resolutionType.ToString(),
-            Timestamp = DateTime.UtcNow
-        });
-
-        var dto = new GameResolutionDto(
-            resolution.IsAnswerCorrect,
-            resolution.PointsAwarded,
-            resolution.CurrentScore,
-            resolution.TeamAnswer);
-
-        await Clients.All.SendAsync("GameResolved", dto);
     }
 
     #endregion

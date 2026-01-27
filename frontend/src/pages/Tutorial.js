@@ -30,9 +30,9 @@ import InputModal from "../components/InputModal";
 function Tutorial() {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState("");
-  const [usernameSet, setUsernameSet] = useState(false);
-  const [tutorialStep, setTutorialStep] = useState(0);
-  const [wrongAnswer, setWrongAnswer] = useState(0);
+  const [isUsernameInitialized, setIsUsernameInitialized] = useState(false);
+  const [currentTutorialStep, setCurrentTutorialStep] = useState(0);
+  const [isIncorrectAnswer, setIsIncorrectAnswer] = useState(false);
   const [typedMessage, setTypedMessage] = useState("");
   const [newMessage, setNewMessage] = useState("");
   const [showMessageBox, setShowMessageBox] = useState(false);
@@ -69,9 +69,9 @@ function Tutorial() {
 
   const handleTutorialStep1 = () => {
     setCurrentUser(t("your_name"));
-    setUsernameSet(true);
-    setMaxTime(90);
-    setTutorialStep(1);
+    setIsUsernameInitialized(true);
+    setMaxTime(75);
+    setCurrentTutorialStep(1);
 
     setChimes({
       messageSent: true,
@@ -82,7 +82,7 @@ function Tutorial() {
 
   const handleSimulation1 = () => {
     const simulationConfederate = t("tutorial_confederate_1");
-    setTutorialStep(11);
+    setCurrentTutorialStep(11);
     setConfederate(simulationConfederate);
     setCurrentUser(t("tutorial_participant_1"));
     tutorialProblem({ block: { Name: "T_1" }, problem: "1" });
@@ -93,7 +93,7 @@ function Tutorial() {
       setTimeout(() => {
         readyButtonRef.current.classList.remove("click-animation");
         setTimeout(() => {
-          setTutorialStep(12);
+          setCurrentTutorialStep(12);
         }, 200);
 
         startTimer();
@@ -108,7 +108,7 @@ function Tutorial() {
             });
             stopTimer();
             setTimeout(() => {
-              setTutorialStep(13);
+              setCurrentTutorialStep(13);
             }, 2000);
           }, 1000);
         }, 2800);
@@ -120,7 +120,7 @@ function Tutorial() {
     const simulationConfederate = t("tutorial_confederate_1");
     setMaxTime(70);
     startTimer();
-    setTutorialStep(14);
+    setCurrentTutorialStep(14);
     handleTutorialMessage(t("the_answer_is_triangle"));
 
     setTimeout(() => {
@@ -141,7 +141,7 @@ function Tutorial() {
           startTimer();
 
           setTimeout(() => {
-            setTutorialStep(15);
+            setCurrentTutorialStep(15);
           }, 25000);
         }, 3000);
       }, 3000);
@@ -152,9 +152,9 @@ function Tutorial() {
     setAnswer("");
     resetPoints();
     clearChat();
-    setMaxTime(90);
+    setMaxTime(75);
     const simulationConfederate = t("tutorial_confederate_2");
-    setTutorialStep(16);
+    setCurrentTutorialStep(16);
     setConfederate(simulationConfederate);
     setCurrentUser(t("tutorial_participant_2"));
     tutorialProblem({ block: { Name: "T_1" }, Problem: "2" });
@@ -165,7 +165,7 @@ function Tutorial() {
       setTimeout(() => {
         readyButtonRef.current.classList.remove("click-animation");
         setTimeout(() => {
-          setTutorialStep(12);
+          setCurrentTutorialStep(12);
         }, 200);
 
         startTimer();
@@ -180,7 +180,7 @@ function Tutorial() {
             });
             stopTimer();
             setTimeout(() => {
-              setTutorialStep(17);
+              setCurrentTutorialStep(17);
             }, 2000);
           }, 1000);
         }, 2800);
@@ -192,7 +192,7 @@ function Tutorial() {
     const simulationConfederate = t("tutorial_confederate_2");
     setMaxTime(70);
     startTimer();
-    setTutorialStep(18);
+    setCurrentTutorialStep(18);
     handleTutorialMessage(t("i_think_the_answer_is_11"));
 
     setTimeout(() => {
@@ -213,7 +213,7 @@ function Tutorial() {
           startTimer();
 
           setTimeout(() => {
-            setTutorialStep(19);
+            setCurrentTutorialStep(19);
           }, 25000);
         }, 3000);
       }, 3000);
@@ -222,16 +222,16 @@ function Tutorial() {
 
   const handleSimulation3 = () => {
     clearChat();
-    setMaxTime(90);
+    setMaxTime(75);
     const simulationConfederate = t("tutorial_confederate_3");
-    setTutorialStep(20);
+    setCurrentTutorialStep(20);
     setConfederate(simulationConfederate);
     setCurrentUser(t("tutorial_participant_3"));
     tutorialProblem({ block: { Name: "T_1" }, Problem: "3" });
   };
 
   const handleTutorialStep20 = () => {
-    setTutorialStep(21);
+    setCurrentTutorialStep(21);
     const simulationConfederate = t("tutorial_confederate_3");
     typing(simulationConfederate);
     setTimeout(() => {
@@ -243,7 +243,7 @@ function Tutorial() {
           timeStamp: new Date().toISOString()
         });
         setTimeout(() => {
-          setTutorialStep(22);
+          setCurrentTutorialStep(22);
         }, 2000);
       }, 1000);
     }, 2000);
@@ -251,12 +251,12 @@ function Tutorial() {
 
   const handleTutorialStep24 = () => {
     tutorialDone(numTries);
-    setTutorialStep(25);
+    setCurrentTutorialStep(25);
   };
 
   useEffect(() => {
     const pattern =
-      tutorialStep === 23
+      currentTutorialStep >= 22
         ? new RegExp(
             "^" + t("arrow_up_green_pattern").replace(/\s+/g, "\\s*") + "$",
             "i"
@@ -264,16 +264,16 @@ function Tutorial() {
         : null;
 
     const handleMessage = (message) => {
-      if (tutorialStep === 23 && pattern) {
+      if (currentTutorialStep === 23 && pattern) {
         const received = message.text.trim();
         if (pattern.test(received)) {
-          setWrongAnswer(0);
-          setTutorialStep(24);
+          setIsIncorrectAnswer(false);
+          setCurrentTutorialStep(24);
         } else {
           setNumTries(numTries + 1);
           setTypedMessage(message.text);
-          setWrongAnswer(1);
-          setTutorialStep(22);
+          setIsIncorrectAnswer(true);
+          setCurrentTutorialStep(22);
         }
       }
     };
@@ -283,7 +283,7 @@ function Tutorial() {
     return () => {
       offReceiveMessage(handleMessage);
     };
-  }, [tutorialStep, numTries, t]);
+  }, [currentTutorialStep, numTries, t]);
 
   const handleTutorialMessage = (message) => {
     setShowMessageBox(true);
@@ -339,13 +339,13 @@ function Tutorial() {
   return (
     <div className="container mt-4">
       <h1 className="text-center mb-4">{t("title")}</h1>
-      {tutorialStep === 0 && (
+      {currentTutorialStep === 0 && (
         <div className="mb-4" style={{ textAlign: "left" }}>
           <p>{t("welcome")}</p>
           <Trans i18nKey="tutorial_intro" components={{ p: <p /> }} />
         </div>
       )}
-      {tutorialStep === 0 && (
+      {currentTutorialStep === 0 && (
         <div className="mb-4" style={{ textAlign: "center" }}>
           <p>{t("start_tutorial")}</p>
           <button className="btn btn-primary btn-narrow" onClick={handleTutorialStep1}>
@@ -353,43 +353,43 @@ function Tutorial() {
           </button>
         </div>
       )}
-      {tutorialStep === 1 && (
+      {currentTutorialStep === 1 && (
         <Modal>
           <p>{t("tutorial_step1")}</p>
           <button
             className="btn btn-primary btn-narrow"
             style={{ minWidth: "120px", width: "120px", textAlign: "center" }}
-            onClick={() => setTutorialStep(2)}
+            onClick={() => setCurrentTutorialStep(2)}
           >
             {t("understood")}
           </button>
         </Modal>
       )}
-      {tutorialStep === 2 && (
-        <InputModal onUnderstood={() => setTutorialStep(3)} inputRef={messageRef?.current} text={t("inputmodal_2")} />
+      {currentTutorialStep === 2 && (
+        <InputModal onUnderstood={() => setCurrentTutorialStep(3)} inputRef={messageRef?.current} text={t("inputmodal_2")} />
       )}
-      {tutorialStep === 3 && (
-        <InputModal onUnderstood={() => setTutorialStep(4)} inputRef={chatRef?.current} text={t("inputmodal_3")} />
+      {currentTutorialStep === 3 && (
+        <InputModal onUnderstood={() => setCurrentTutorialStep(4)} inputRef={chatRef?.current} text={t("inputmodal_3")} />
       )}
-      {tutorialStep === 4 && (
-        <InputModal onUnderstood={() => setTutorialStep(5)} inputRef={confederateNameRef?.current} text={t("inputmodal_4")} />
+      {currentTutorialStep === 4 && (
+        <InputModal onUnderstood={() => setCurrentTutorialStep(5)} inputRef={confederateNameRef?.current} text={t("inputmodal_4")} />
       )}
-      {tutorialStep === 5 && (
-        <InputModal onUnderstood={() => setTutorialStep(6)} inputRef={activityRef?.current} text={t("inputmodal_5")} />
+      {currentTutorialStep === 5 && (
+        <InputModal onUnderstood={() => setCurrentTutorialStep(6)} inputRef={activityRef?.current} text={t("inputmodal_5")} />
       )}
-      {tutorialStep === 6 && (
-        <InputModal onUnderstood={() => setTutorialStep(7)} inputRef={gamesRef?.current} text={t("inputmodal_6")} />
+      {currentTutorialStep === 6 && (
+        <InputModal onUnderstood={() => setCurrentTutorialStep(7)} inputRef={gamesRef?.current} text={t("inputmodal_6")} />
       )}
-      {tutorialStep === 7 && (
-        <InputModal onUnderstood={() => setTutorialStep(8)} inputRef={timerRef?.current} text={t("inputmodal_7")} />
+      {currentTutorialStep === 7 && (
+        <InputModal onUnderstood={() => setCurrentTutorialStep(8)} inputRef={timerRef?.current} text={t("inputmodal_7")} />
       )}
-      {tutorialStep === 8 && (
-        <InputModal onUnderstood={() => setTutorialStep(9)} inputRef={pointsRef?.current} text={t("inputmodal_8")} />
+      {currentTutorialStep === 8 && (
+        <InputModal onUnderstood={() => setCurrentTutorialStep(9)} inputRef={pointsRef?.current} text={t("inputmodal_8")} />
       )}
-      {tutorialStep === 9 && (
-        <InputModal onUnderstood={() => setTutorialStep(10)} inputRef={teamAnswerRef?.current} text={t("inputmodal_9")} />
+      {currentTutorialStep === 9 && (
+        <InputModal onUnderstood={() => setCurrentTutorialStep(10)} inputRef={teamAnswerRef?.current} text={t("inputmodal_9")} />
       )}
-      {tutorialStep === 10 && (
+      {currentTutorialStep === 10 && (
         <Modal>
           <p>{t("tutorial_step10")}</p>
           <button
@@ -401,7 +401,7 @@ function Tutorial() {
           </button>
         </Modal>
       )}
-      {tutorialStep === 11 && (
+      {currentTutorialStep === 11 && (
         <Modal>
           <p>{t("playing_with")}</p>
           <p className="h2">
@@ -412,7 +412,7 @@ function Tutorial() {
           </button>
         </Modal>
       )}
-      {tutorialStep === 13 && (
+      {currentTutorialStep === 13 && (
         <Modal>
           <p>{t("tutorial_step13")}</p>
           <button
@@ -424,7 +424,7 @@ function Tutorial() {
           </button>
         </Modal>
       )}
-      {tutorialStep === 15 && (
+      {currentTutorialStep === 15 && (
         <Modal>
           <p>{t("tutorial_step15")}</p>
           <button
@@ -436,7 +436,7 @@ function Tutorial() {
           </button>
         </Modal>
       )}
-      {tutorialStep === 16 && (
+      {currentTutorialStep === 16 && (
         <Modal>
           <p>{t("playing_with")}</p>
           <p className="h2">
@@ -447,7 +447,7 @@ function Tutorial() {
           </button>
         </Modal>
       )}
-      {tutorialStep === 17 && (
+      {currentTutorialStep === 17 && (
         <Modal>
           <p>{t("tutorial_step17")}</p>
           <button
@@ -459,7 +459,7 @@ function Tutorial() {
           </button>
         </Modal>
       )}
-      {tutorialStep === 19 && (
+      {currentTutorialStep === 19 && (
         <Modal>
           <p>{t("tutorial_step19")}</p>
           <button
@@ -471,7 +471,7 @@ function Tutorial() {
           </button>
         </Modal>
       )}
-      {tutorialStep === 20 && (
+      {currentTutorialStep === 20 && (
         <Modal>
           <p>{t("tutorial_step20_1")}</p>
           <p>{t("tutorial_step20_2")}</p>
@@ -484,31 +484,31 @@ function Tutorial() {
           </button>
         </Modal>
       )}
-      {tutorialStep === 22 && !wrongAnswer && (
+      {currentTutorialStep === 22 && !isIncorrectAnswer && (
         <Modal>
           <p>{t("tutorial_step22")}</p>
           <button
             className="btn btn-primary btn-narrow"
             style={{ minWidth: "120px", width: "120px", textAlign: "center" }}
-            onClick={() => setTutorialStep(23)}
+            onClick={() => setCurrentTutorialStep(23)}
           >
             {t("understood")}
           </button>
         </Modal>
       )}
-      {tutorialStep === 22 && wrongAnswer && (
+      {currentTutorialStep === 22 && isIncorrectAnswer && (
         <Modal>
           <Trans i18nKey="tutorial_step22_wrong" values={{ typedMessage }} components={{ b: <b /> }} />
           <button
             className="btn btn-primary btn-narrow"
             style={{ minWidth: "120px", width: "120px", textAlign: "center" }}
-            onClick={() => setWrongAnswer(0)}
+            onClick={() => setIsIncorrectAnswer(false)}
           >
             {t("understood")}
           </button>
         </Modal>
       )}
-      {tutorialStep === 24 && (
+      {currentTutorialStep === 24 && (
         <Modal>
           <p>{t("excellent")}</p>
           <button
@@ -520,12 +520,12 @@ function Tutorial() {
           </button>
         </Modal>
       )}
-      {tutorialStep === 25 && (
+      {currentTutorialStep === 25 && (
         <Modal>
           <p>{t("tutorial_step25")}</p>
         </Modal>
       )}
-      {usernameSet && (
+      {isUsernameInitialized && (
         <div className="row">
           <ChatBox
             currentUser={currentUser}
@@ -535,7 +535,7 @@ function Tutorial() {
             confederateNameRef={confederateNameRef}
             activityRef={activityRef}
             sendButtonRef={sendButtonRef}
-            disabled={tutorialStep < 23}
+            disabled={currentTutorialStep < 23}
           />
           <GameBox isAdmin={false} gamesRef={gamesRef} timerRef={timerRef} pointsRef={pointsRef} teamAnswerRef={teamAnswerRef} />
           {showMessageBox && (
