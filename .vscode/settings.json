@@ -1,0 +1,4 @@
+{
+  "jest.rootPath": "frontend",
+  "jest.runMode": "on-demand"
+}
