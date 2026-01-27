@@ -103,7 +103,7 @@ function Participant() {
 
       {usernameSet && (
         <div className="row">
-          <ChatBox currentUser={currentUser} isAdmin={false} />
+          <ChatBox currentUser={currentUser} isAdmin={false} disabled={false} />
           <GameBox isAdmin={false} />
         </div>
       )}

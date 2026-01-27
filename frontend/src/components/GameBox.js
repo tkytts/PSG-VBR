@@ -67,7 +67,7 @@ function GameBox({ isAdmin, gamesRef, timerRef, pointsRef, teamAnswerRef }) {
             setTeamScore(resolution.currentScore);
           }, 3000);
         }, 3000);
-      }, (countdown * 1000) + 3000); // converting seconds to milliseconds
+      }, 3000); // converting seconds to milliseconds
     };
 
     const handleProblemUpdate = ({ block, problem }) => {

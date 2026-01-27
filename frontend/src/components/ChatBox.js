@@ -18,7 +18,7 @@ import {
   telemetryEvent,
 } from "../realtime/game";
 
-function ChatBox({ currentUser, isAdmin, messageRef, chatRef, confederateNameRef, activityRef, sendButtonRef }) {
+function ChatBox({ currentUser, isAdmin, messageRef, chatRef, confederateNameRef, activityRef, sendButtonRef, disabled }) {
   const { t } = useTranslation();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -215,11 +215,13 @@ function ChatBox({ currentUser, isAdmin, messageRef, chatRef, confederateNameRef
               onChange={(e) => handleTyping(e)}
               onKeyUp={handleKeyPress}
               ref={messageRef}
+              disabled={disabled}
             />
             <button
               className="btn btn-primary"
               onClick={handleSend}
-              ref={sendButtonRef}>
+              ref={sendButtonRef}
+              disabled={disabled}>
               {t('send_message')}
             </button>
             {isAdmin && (

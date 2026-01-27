@@ -193,7 +193,11 @@ public class GameHub : Hub
 
                 if (_timerService.CurrentCountdown <= 0)
                 {
-                    await ResolveGameInternal(GameResolutionType.TNP, null);
+                    var resolutionType = _gameService.State.PendingResolutionType ?? GameResolutionType.TNP;
+                    var teamAnswer = _gameService.State.TeamAnswer;
+                    await ResolveGameInternal(resolutionType, teamAnswer);
+                    _gameService.State.PendingResolutionType = null;
+                    _gameService.State.TeamAnswer = null;
                     break;
                 }
             }
@@ -254,12 +258,14 @@ public class GameHub : Hub
 
     /// <summary>
     /// Sets the game resolution type and team answer.
+    /// The resolution is stored but GameResolved is only broadcast when the timer reaches 0.
     /// </summary>
     public async Task SetGameResolution(SetGameResolutionDto data)
     {
         if (Enum.TryParse<GameResolutionType>(data.GameResolutionType, out var resolutionType))
         {
-            await ResolveGameInternal(resolutionType, data.TeamAnswer);
+            _gameService.State.PendingResolutionType = resolutionType;
+            _gameService.State.TeamAnswer = data.TeamAnswer;
             await Clients.All.SendAsync("SetAnswer", data.TeamAnswer ?? string.Empty);
         }
     }

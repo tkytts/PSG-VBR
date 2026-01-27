@@ -535,6 +535,7 @@ function Tutorial() {
             confederateNameRef={confederateNameRef}
             activityRef={activityRef}
             sendButtonRef={sendButtonRef}
+            disabled={tutorialStep < 23}
           />
           <GameBox isAdmin={false} gamesRef={gamesRef} timerRef={timerRef} pointsRef={pointsRef} teamAnswerRef={teamAnswerRef} />
           {showMessageBox && (

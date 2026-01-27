@@ -195,7 +195,7 @@ function Experimenter() {
       <h1 className="text-center mb-4">{t("title")}</h1>
 
       <div className="row">
-        <ChatBox currentUser={currentParticipant} isAdmin={true} />
+        <ChatBox currentUser={currentParticipant} isAdmin={true} disabled={false} />
         <GameBox isAdmin={true} />
       </div>
       <button className="btn btn-primary" onClick={openGameConfigModal}>
