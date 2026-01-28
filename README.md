@@ -6,15 +6,15 @@ A full-stack application for running behavioral experiments with real-time commu
 
 ### Experimenter View
 ![Experimenter interface](docs/screenshots/experimenter.png)
-*The experimenter controls game flow, sends confederate messages, and monitors the participant in real-time.*
+*The experimenter controls game flow, manages chat interactions, and monitors the session in real-time.*
 
 ### Participant View
 ![Participant interface](docs/screenshots/participant.png)
-*Participants solve problems collaboratively while chatting with the confederate (controlled by the experimenter).*
+*Participants solve problems collaboratively while chatting with a partner in real-time.*
 
 ### Game Configuration
 ![Game configuration modal](docs/screenshots/start-game-modal.png)
-*Experimenters configure session parameters: confederate identity, points per round, time limits, and audio cues.*
+*Experimenters configure session parameters: participant names, points per round, time limits, and audio cues.*
 
 ### Resolution Controls
 ![Resolve game modal](docs/screenshots/resolve-game-modal.png)
