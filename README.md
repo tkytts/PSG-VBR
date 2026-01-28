@@ -71,7 +71,7 @@ Frontend runs at `http://localhost:3000`
 
 ## Architecture
 
-This platform is designed for **controlled research sessions** with exactly two connected users: one experimenter and one participant. This is intentional—behavioral research requires isolated, reproducible conditions where the experimenter has full control over the session environment.
+This platform is designed for **controlled research sessions** with exactly two connected users: one experimenter and one participant. This is intentional; behavioral research requires isolated, reproducible conditions where the experimenter has full control over the session environment.
 
 The architecture reflects this constraint:
 
