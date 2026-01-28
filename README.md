@@ -2,6 +2,24 @@
 
 A full-stack application for running behavioral experiments with real-time communication. Built with React and .NET 8.
 
+## Screenshots
+
+### Experimenter View
+![Experimenter interface](docs/screenshots/experimenter.png)
+*The experimenter controls game flow, sends confederate messages, and monitors the participant in real-time.*
+
+### Participant View
+![Participant interface](docs/screenshots/participant.png)
+*Participants solve problems collaboratively while chatting with the confederate (controlled by the experimenter).*
+
+### Game Configuration
+![Game configuration modal](docs/screenshots/game-config.png)
+*Experimenters configure session parameters: confederate identity, points per round, time limits, and audio cues.*
+
+### Resolution Controls
+![Resolve game modal](docs/screenshots/resolve-game.png)
+*After each problem, the experimenter records the outcome (Correct, Incorrect, Timeout, etc.) for research analysis.*
+
 ## Project Structure
 
 ```
