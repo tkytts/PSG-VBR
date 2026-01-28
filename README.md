@@ -104,7 +104,7 @@ The architecture reflects this constraint:
 │   (React)       │                          │                 │
 └─────────────────┘                          │  ┌───────────┐  │
                                              │  │ GameState │  │
-┌─────────────────┐         SignalR          │  │ (Singleton)│  │
+┌─────────────────┐         SignalR          │  │(Singleton)│  │
 │  Participant    │◄──────────────────────►  │  └───────────┘  │
 │   (React)       │                          │                 │
 └─────────────────┘                          └────────┬────────┘
