@@ -18,7 +18,18 @@ A full-stack application for running behavioral experiments with real-time commu
 - [Node.js 18+](https://nodejs.org/) and npm
 - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 
-### Run Backend
+### One-Command Start (Windows)
+
+```bash
+start-dev.bat        # Full setup (runs npm install)
+start-dev-fast.bat   # Fast mode (skips npm install)
+```
+
+This launches both backend and frontend in separate terminal windows.
+
+### Manual Setup
+
+#### Run Backend
 
 ```bash
 cd backend
@@ -28,7 +39,7 @@ dotnet run --project src/GameServer.Api
 
 Backend runs at `http://localhost:5000`
 
-### Run Frontend
+#### Run Frontend
 
 ```bash
 cd frontend
@@ -57,6 +68,36 @@ Frontend runs at `http://localhost:3000`
 - **Research Telemetry** - CSV logging for data collection
 - **Configurable Audio Cues** - Chimes for messages, timer events
 - **E2E Testing** - Playwright tests for complete workflows
+
+## Architecture
+
+This platform is designed for **controlled research sessions** with exactly two connected users: one experimenter and one participant. This is intentional—behavioral research requires isolated, reproducible conditions where the experimenter has full control over the session environment.
+
+The architecture reflects this constraint:
+
+- **Singleton GameState** - A single shared game state ensures both users see identical, synchronized data
+- **Centralized Timer** - Server-authoritative countdown prevents client-side manipulation
+- **Real-time Event Bus** - SignalR broadcasts state changes to all connected clients immediately
+- **Telemetry Pipeline** - Every interaction is logged to CSV for post-session analysis
+
+```
+┌─────────────────┐         SignalR          ┌─────────────────┐
+│  Experimenter   │◄──────────────────────►  │   .NET 8 API    │
+│   (React)       │                          │                 │
+└─────────────────┘                          │  ┌───────────┐  │
+                                             │  │ GameState │  │
+┌─────────────────┐         SignalR          │  │ (Singleton)│  │
+│  Participant    │◄──────────────────────►  │  └───────────┘  │
+│   (React)       │                          │                 │
+└─────────────────┘                          └────────┬────────┘
+                                                      │
+                                                      ▼
+                                             ┌─────────────────┐
+                                             │  CSV Telemetry  │
+                                             └─────────────────┘
+```
+
+For multi-session support, the architecture could be extended with session IDs and scoped state management, but the current design prioritizes simplicity and research validity over scalability.
 
 ## Configuration
 
