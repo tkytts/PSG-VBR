@@ -13,11 +13,11 @@ A full-stack application for running behavioral experiments with real-time commu
 *Participants solve problems collaboratively while chatting with the confederate (controlled by the experimenter).*
 
 ### Game Configuration
-![Game configuration modal](docs/screenshots/game-config.png)
+![Game configuration modal](docs/screenshots/start-game-modal.png)
 *Experimenters configure session parameters: confederate identity, points per round, time limits, and audio cues.*
 
 ### Resolution Controls
-![Resolve game modal](docs/screenshots/resolve-game.png)
+![Resolve game modal](docs/screenshots/resolve-game-modal.png)
 *After each problem, the experimenter records the outcome (Correct, Incorrect, Timeout, etc.) for research analysis.*
 
 ## Project Structure
