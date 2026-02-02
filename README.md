@@ -117,6 +117,33 @@ The architecture reflects this constraint:
 
 For multi-session support, the architecture could be extended with session IDs and scoped state management, but the current design prioritizes simplicity and research validity over scalability.
 
+## Security Considerations
+
+> **⚠️ Important:** This application was not designed with security as a priority. It is intended for controlled research environments, not production deployment.
+
+### Intended Use
+
+This platform is designed to be:
+- **Deployed on-demand** — only running during active data collection sessions
+- **Hosted on a local network** — ideally accessible only to devices on the same LAN as the server
+
+### Known Limitations
+
+- No authentication or authorization mechanisms
+- No input sanitization beyond basic framework defaults
+- No rate limiting or abuse prevention
+- No encryption of research data at rest
+
+### Deployment Notes
+
+University and institutional networks often have firewall restrictions that prevent local hosting. One workaround is using a reverse proxy service like [ngrok](https://ngrok.com/) to tunnel traffic to a home machine. This introduces additional risk since the application becomes publicly accessible, but may be acceptable for short data collection sessions (a few hours) where:
+
+- The session URL is shared only with known participants
+- The server is shut down immediately after the session
+- No sensitive data beyond research responses is collected
+
+**If you require a secure deployment**, consider adding authentication, HTTPS enforcement, and proper input validation before exposing this application to any untrusted network.
+
 ## Configuration
 
 ### Frontend Environment Variables
