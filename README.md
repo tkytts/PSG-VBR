@@ -174,14 +174,6 @@ Edit `backend/src/GameServer.Api/appsettings.json`:
 
 ## Testing
 
-### Run Everything at Once (Windows)
-
-```bash
-ci-check.bat   # Lint, build, and test — frontend and backend
-```
-
-Mirrors the GitHub CI pipeline exactly. Stops on the first failure so you catch issues before pushing.
-
 ### Frontend Tests
 
 ```bash

@@ -191,7 +191,7 @@ test: add ChatBox component tests
 
 1. Create a feature branch: `git checkout -b feat/my-feature`
 2. Make your changes with conventional commits
-3. Run `ci-check.bat` from the repo root to verify lint, build, and tests pass for both frontend and backend before pushing
+3. Run tests: `npm test` (frontend) and `dotnet test` (backend)
 4. Push and open a PR against `main`
 5. Fill out the PR template with:
    - Description of changes
