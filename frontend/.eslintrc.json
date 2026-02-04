@@ -13,5 +13,13 @@
       "jsx-attributes": { "include": ["placeholder", "alt", "title", "aria-label"] },
       "words": { "exclude": ["^A[+-]$", "^:$"] }
     }]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**/__tests__/**/*.js", "**/*.test.js"],
+      "rules": {
+        "i18next/no-literal-string": "off"
+      }
+    }
+  ]
 }

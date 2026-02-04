@@ -46,7 +46,7 @@
     "player_name": "Nome do(a) jogador(a)",
     "messages": "Mensagens",
     "activity": "Atividade",
-    "is_typing": "está digitando",
+    "is_typing": "está digitando...",
     "message_placeholder": "Mensagem",
     "send_message": "Enviar",
     "clear_chat": "Limpar Chat",

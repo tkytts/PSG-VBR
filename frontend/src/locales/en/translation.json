@@ -46,7 +46,7 @@
     "player_name": "Player name",
     "messages": "Messages",
     "activity": "Activity",
-    "is_typing": "is typing",
+    "is_typing": "is typing...",
     "message_placeholder": "Message",
     "send_message": "Send",
     "clear_chat": "Clear Chat",

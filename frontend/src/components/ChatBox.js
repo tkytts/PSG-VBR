@@ -198,7 +198,7 @@ function ChatBox({ currentUser, isAdmin, messageRef, chatRef, confederateNameRef
           <div>
             <strong ref={activityRef}>{t('activity')}:</strong>{' '}
             {typingUser && (
-              <nobr className="text-muted">{typingUser} {t('is_typing')}...</nobr>
+              <nobr className="text-muted">{typingUser} {t('is_typing')}</nobr>
             )}
             <br></br>
             <p className="info-box">{isAdmin ? confederateName : currentUser}</p>
