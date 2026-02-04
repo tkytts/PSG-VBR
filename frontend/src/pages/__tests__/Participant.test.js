@@ -68,7 +68,7 @@ describe('Participant Component', () => {
     it('should render name input form initially', () => {
       renderWithProviders(<Participant />);
 
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       const button = screen.getByRole('button');
 
       expect(input).toBeInTheDocument();
@@ -87,7 +87,7 @@ describe('Participant Component', () => {
     it('should update input value when typing', async () => {
       renderWithProviders(<Participant />);
 
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       await userEvent.type(input, 'Test User');
 
       expect(input).toHaveValue('Test User');
@@ -96,7 +96,7 @@ describe('Participant Component', () => {
     it('should call setParticipantName when form is submitted with valid name', async () => {
       renderWithProviders(<Participant />);
 
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       const button = screen.getByRole('button');
 
       await userEvent.type(input, 'Test User');
@@ -117,7 +117,7 @@ describe('Participant Component', () => {
     it('should not submit form when name contains only whitespace', async () => {
       renderWithProviders(<Participant />);
 
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       const button = screen.getByRole('button');
 
       await userEvent.type(input, '   ');
@@ -129,21 +129,21 @@ describe('Participant Component', () => {
     it('should hide name form after successful submission', async () => {
       renderWithProviders(<Participant />);
 
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       const button = screen.getByRole('button');
 
       await userEvent.type(input, 'Test User');
       await userEvent.click(button);
 
       await waitFor(() => {
-        expect(screen.queryByPlaceholderText('Insira seu nome')).not.toBeInTheDocument();
+        expect(screen.queryByPlaceholderText('Your Name')).not.toBeInTheDocument();
       });
     });
 
     it('should submit form using Enter key', async () => {
       renderWithProviders(<Participant />);
 
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       await userEvent.type(input, 'Test User{Enter}');
 
       expect(mockSetParticipantName).toHaveBeenCalledWith('Test User');
@@ -154,7 +154,7 @@ describe('Participant Component', () => {
     it('should render ChatBox and GameBox after name submission', async () => {
       renderWithProviders(<Participant />);
 
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       await userEvent.type(input, 'Test User');
       await userEvent.click(screen.getByRole('button'));
 
@@ -167,7 +167,7 @@ describe('Participant Component', () => {
     it('should pass correct props to ChatBox', async () => {
       renderWithProviders(<Participant />);
 
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       await userEvent.type(input, 'Test User');
       await userEvent.click(screen.getByRole('button'));
 
@@ -182,7 +182,7 @@ describe('Participant Component', () => {
     it('should pass isAdmin=false to GameBox', async () => {
       renderWithProviders(<Participant />);
 
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       await userEvent.type(input, 'Test User');
       await userEvent.click(screen.getByRole('button'));
 
@@ -204,7 +204,7 @@ describe('Participant Component', () => {
       renderWithProviders(<Participant />);
 
       // Submit name
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       await userEvent.type(input, 'Test User');
       await userEvent.click(screen.getByRole('button'));
 
@@ -225,7 +225,7 @@ describe('Participant Component', () => {
 
       renderWithProviders(<Participant />);
 
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       await userEvent.type(input, 'Test User');
       await userEvent.click(screen.getByRole('button'));
 
@@ -248,7 +248,7 @@ describe('Participant Component', () => {
       renderWithProviders(<Participant />);
 
       // Submit name and assign confederate
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       await userEvent.type(input, 'Test User');
       await userEvent.click(screen.getByRole('button'));
 
@@ -274,7 +274,7 @@ describe('Participant Component', () => {
 
       renderWithProviders(<Participant />);
 
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       await userEvent.type(input, 'Test User');
       await userEvent.click(screen.getByRole('button'));
 
@@ -360,7 +360,7 @@ describe('Participant Component', () => {
       renderWithProviders(<Participant />);
 
       // Submit name
-      const input = screen.getByPlaceholderText('Insira seu nome');
+      const input = screen.getByPlaceholderText('Your Name');
       await userEvent.type(input, 'Test User');
       await userEvent.click(screen.getByRole('button'));
 

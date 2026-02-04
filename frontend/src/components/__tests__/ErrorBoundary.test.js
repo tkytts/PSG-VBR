@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
+import i18n from '../../i18n';
 import ErrorBoundary from '../ErrorBoundary';
 
 // Component that throws an error
@@ -19,6 +20,9 @@ describe('ErrorBoundary', () => {
   });
   afterAll(() => {
     console.error = originalError;
+  });
+  beforeEach(() => {
+    i18n.changeLanguage('en');
   });
 
   it('renders children when no error occurs', () => {

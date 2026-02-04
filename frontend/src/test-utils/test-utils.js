@@ -23,7 +23,7 @@ testI18n.use(initReactI18next).init({
         clear_chat: 'Clear Chat',
         message_placeholder: 'Type a message...',
         activity: 'Activity',
-        is_typing: 'is typing',
+        is_typing: 'is typing...',
         find_the_solution_to_the_problem: 'Find the solution to the problem',
         loading_problem: 'Loading problem...',
         team_answer_was: 'The team answer was',
