@@ -1,11 +1,17 @@
 {
   "root": true,
   "extends": ["react-app", "react-app/jest", "eslint:recommended", "plugin:react/recommended", "plugin:jsx-a11y/recommended", "plugin:import/recommended"],
-  "plugins": ["react", "jsx-a11y", "import"],
+  "plugins": ["react", "jsx-a11y", "import", "i18next"],
   "rules": {
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "import/order": ["warn", { "groups": [["builtin", "external", "internal"], ["parent", "sibling", "index"]], "newlines-between": "always" }],
-    "no-console": ["warn", { "allow": ["error", "warn"] }]
+    "no-console": ["warn", { "allow": ["error", "warn"] }],
+    "i18next/no-literal-string": ["error", {
+      "mode": "jsx-only",
+      "framework": "react",
+      "jsx-attributes": { "include": ["placeholder", "alt", "title", "aria-label"] },
+      "words": { "exclude": ["^A[+-]$", "^:$"] }
+    }]
   }
 }

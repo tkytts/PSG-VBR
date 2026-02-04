@@ -130,7 +130,7 @@ function GameBox({ isAdmin, gamesRef, timerRef, pointsRef, teamAnswerRef }) {
             {currentBlock && currentProblem ? (
               <img
                 src={`/problems/${currentBlock.name}/${currentProblem}.png`}
-                alt="Problema"
+                alt={t("problem")}
                 className="img-fluid"
                 style={{ maxWidth: "100%", height: "auto" }}
               />

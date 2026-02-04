@@ -69,7 +69,7 @@ function Participant() {
             <input
               type="text"
               className="form-control"
-              placeholder="Insira seu nome"
+              placeholder={t("your_name")}
               value={currentUser}
               onChange={(e) => setCurrentUser(e.target.value)}
             />

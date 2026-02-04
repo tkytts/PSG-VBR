@@ -539,7 +539,7 @@ function Tutorial() {
           />
           <GameBox isAdmin={false} gamesRef={gamesRef} timerRef={timerRef} pointsRef={pointsRef} teamAnswerRef={teamAnswerRef} />
           {showMessageBox && (
-            <input type="text" className="form-control me-2" placeholder="Mensagem" value={newMessage} style={messageInputStyle} />
+            <input type="text" className="form-control me-2" placeholder={t("message_placeholder")} value={newMessage} style={messageInputStyle} />
           )}
         </div>
       )}

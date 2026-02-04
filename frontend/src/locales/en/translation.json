@@ -98,5 +98,7 @@
     "thank_you_for_participating": "Thank you very much for participating!",
     "please_wait_for_the_researcher": "Please wait. The researcher will return to speak with you in a few minutes.",
     "n_seconds_left": "{{count}} seconds left",
-    "1_second_left": "1 second left"
+    "1_second_left": "1 second left",
+    "error_boundary_message": "Something went wrong.",
+    "problem": "Problem"
 }

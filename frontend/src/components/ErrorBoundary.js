@@ -1,5 +1,7 @@
 import React from "react";
 
+import i18n from "../i18n";
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +16,7 @@ class ErrorBoundary extends React.Component {
   }
   render() {
     if (this.state.hasError) {
-      return <div role="alert">Something went wrong.</div>;
+      return <div role="alert">{i18n.t("error_boundary_message")}</div>;
     }
     return this.props.children;
   }
